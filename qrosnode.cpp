@@ -1,13 +1,12 @@
 #include "qrosnode.h"
-
-#include <merbots_whrov/hrov_state.h>
-
-namespace merbots_whrov_hmi {
+#include <QDebug>
 
 QROSNode::QROSNode(int argc, char** argv ):
     init_argc(argc),
     init_argv(argv)
-{}
+{
+    init();
+}
 
 QROSNode::~QROSNode() {
     if(ros::isStarted()) {
@@ -49,9 +48,27 @@ bool QROSNode::init(const std::string &master_url, const std::string &host_url) 
     return true;
 }
 
+void QROSNode::HandleNewROVPosition(const merbots_whrov::position::ConstPtr & msg)
+{
+    //log(Info, "New ROV position received");
+    qDebug() << "New ROV position received";
+}
+
+void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg)
+{
+    //log(Info, "New ROV image received");
+}
+
 void QROSNode::CreateROSCommunications(ros::NodeHandle & nh)
 {
-    desiredState_publisher = nh.advertise<merbots_whrov::hrov_state>("merbots/whrov/operator/desired_hrov_state", 1);
+    settings_publisher = nh.advertise<merbots_whrov::hrov_settings>("merbots/whrov/operator/desired_hrov_settings", 1);
+    position_subscriber = nh.subscribe<merbots_whrov::position>("merbots/whrov/operator/current_hrov_position", 1,
+       boost::bind(&QROSNode::HandleNewROVPosition, this, _1));
+
+    image_transport::ImageTransport it(nh);
+    image_subscriber = it.subscribe("usb_cam/image_raw", 1,
+        boost::bind(&QROSNode::HandleNewImage, this, _1)
+                                    );
 }
 
 void QROSNode::run() {
@@ -121,4 +138,3 @@ void QROSNode::log( const LogLevel &level, const std::string &_msg) {
     Q_EMIT loggingUpdated(); // used to readjust the scrollbar
 }
 
-}

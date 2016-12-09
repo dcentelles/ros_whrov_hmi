@@ -8,8 +8,14 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  genmsg
   merbots_whrov
+  std_srvs
+  cola2_msgs
+  auv_msgs
+  actionlib
+  actionlib_msgs
+  cv_bridge
+  image_transport
 )
 
 # Find includes in corresponding build directories
@@ -23,7 +29,10 @@ SET(CMAKE_AUTOUIC ON)
 find_package(Qt5Widgets)
 find_package(Qt5Core)
 
-generate_messages(DEPENDENCIES std_msgs)
+generate_messages(DEPENDENCIES
+    std_msgs
+    actionlib_msgs
+    )
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
@@ -33,6 +42,7 @@ set(${PROJECT_NAME}_LIB ${PROJECT_NAME}_lib)
 # Tell CMake to create the ${PROJECT_NAME} executable
 add_library(${${PROJECT_NAME}_LIB}
 	whrovmainwindow.cpp
+        imageview.cpp
 	qrosnode.cpp
 	)
 
@@ -143,7 +153,14 @@ target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIB})
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES qt_prueba
-#  CATKIN_DEPENDS other_catkin_pkg
+    CATKIN_DEPENDS
+    roscpp std_msgs
+    message_runtime
+    cola2_msgs
+    auv_msgs
+    actionlib_msgs
+    cv_bridge
+    image_transport
 #  DEPENDS system_lib
 )
 

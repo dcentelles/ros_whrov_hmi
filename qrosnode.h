@@ -4,12 +4,14 @@
 #include <QStringListModel>
 #include <ros/ros.h>
 #include <ros/network.h>
+#include <merbots_whrov/position.h>
+#include <merbots_whrov/hrov_settings.h>
+#include <image_transport/image_transport.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <cv_bridge/cv_bridge.h>
 
-namespace merbots_whrov_hmi {
-
-class QROSNode : public QThread
-{
-    Q_OBJECT
+class QROSNode : public QThread{
+Q_OBJECT
 public:
     QROSNode(int argc, char** argv );
     virtual ~QROSNode();
@@ -36,14 +38,15 @@ Q_SIGNALS:
 
 private:
     void CreateROSCommunications(ros::NodeHandle & n);
-
+    void HandleNewROVPosition(const merbots_whrov::position::ConstPtr & msg);
+    void HandleNewImage(const sensor_msgs::ImageConstPtr& msg);
     int init_argc;
     char** init_argv;
-    ros::Publisher desiredState_publisher;
-    ros::Subscriber currentState_subscriber;
+    ros::Publisher settings_publisher;
+    ros::Subscriber position_subscriber;
+    image_transport::Subscriber image_subscriber;
     QStringListModel logging_model;
 };
 
 #endif // QROSNODE_H
 
-}
