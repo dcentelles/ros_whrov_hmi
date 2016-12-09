@@ -21,7 +21,7 @@ protected:
 
 private:
     Ui::ImageView *ui;
-    QPixmap pixmap;
+    QPixmap pixmap, imagePixmap;
     int width, height;
 
     int x0,y0,x1,y1;
@@ -37,7 +37,7 @@ private:
     void notifyPoint1(int x, int y);
     bool pointIn(int x, int y);
 
-    //QPainter painter;
+    QPainter painter;
 };
 
 #endif // IMAGEVIEW_H

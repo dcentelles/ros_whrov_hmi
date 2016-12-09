@@ -8,12 +8,11 @@ ImageView::ImageView(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ImageView),
     width(352), height(288),
-    pixmap(352, 288)
+    pixmap(352, 288),
+    imagePixmap(352,288)
     //painter(&pixmap)
-
 {
     ui->setupUi(this);
-
     ui->image_label->setPixmap(pixmap);
     //ui->image_label->setFixedHeight(height);
    // ui->image_label->setFixedWidth(width);
@@ -23,6 +22,9 @@ ImageView::ImageView(QWidget *parent) :
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint );
     ui->image_label->installEventFilter(this);
     roiStarted = false;
+
+   // painter.end();
+   // imagePixmap.load("/home/centelld/programming/catkin_ws/src/qt_ws/whrov_hmi/Girona-500_1_brit.jpg");
 
 
 }
@@ -140,7 +142,7 @@ void ImageView::notifyPoint1(int x, int y)
         updatePoint1(x, y);
         QString sposition = QString("(x: %0 ; y: %1 )").arg(
                     QString::number(x1),
-                    QString::number(x1));
+                    QString::number(y1));
         qDebug() << sposition << ": updating ROI";
     }
 }
@@ -155,16 +157,28 @@ void ImageView::updatePoint1(int x, int y)
 void ImageView::drawCurrentROI()
 {
     //TODO: draw rectangle on pixmap
-    qDebug() << "Drawing rectangle";
-    QPainter painter(this);
+    QString sposition = QString("(x0: %0 ; y0: %1 ; x1: %2 ; y1: %3)").arg(
+                QString::number(x0),
+                QString::number(y0),
+                QString::number(x1),
+                QString::number(y1)
+                );
+    qDebug() << sposition << ": Drawing rectangle";
 
-    painter.setPen(Qt::blue);
-    painter.setFont(QFont("Arial", 30));
-    painter.drawText(rect(), Qt::AlignCenter, "Qt");
 
-   //QRect rect(x0 , y0 , x1 , y1 );
 
-  //  painter.drawRect(rect);
+    pixmap = imagePixmap.copy(0,0, imagePixmap.width(),
+                                   imagePixmap.height());
+    painter.begin(&pixmap);
+
+    painter.setBrush(Qt::NoBrush);
+    QPen pen(Qt::red, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+    painter.setPen(pen);
+
+    painter.drawRect(x0, y0, x1-x0, y1-y0);
+    ui->image_label->setPixmap(pixmap);
+
+    painter.end();
 }
 
 void ImageView::notifyROI()
