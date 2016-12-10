@@ -23,6 +23,11 @@ ImageView::ImageView(QWidget *parent) :
     ui->image_label->installEventFilter(this);
     roiStarted = false;
 
+    x0 = 0;
+    y0 = 0;
+    x1 = 1;
+    y1 = 1;
+   // auxLabel.show();
    // painter.end();
    // imagePixmap.load("/home/centelld/programming/catkin_ws/src/qt_ws/whrov_hmi/Girona-500_1_brit.jpg");
 
@@ -181,7 +186,26 @@ void ImageView::drawCurrentROI()
     painter.end();
 }
 
+void ImageView::updateImage(const QImage & _image)
+{
+    image = _image;
+    imagePixmap = QPixmap::fromImage(image);
+    drawCurrentROI();
+
+
+}
+
 void ImageView::notifyROI()
 {
-    //TODO: emit a signal with the current ROI
+    emit newROI(x0,y0,x1,y1);
+}
+
+void ImageView::updateROI(int _x0, int _y0, int _x1, int _y1, int shift)
+{
+    x0 = _x0;
+    y0 = _y0;
+    x1 = _x1;
+    y1 = _y1;
+
+    drawCurrentROI();
 }

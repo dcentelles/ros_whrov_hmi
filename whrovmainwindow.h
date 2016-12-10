@@ -15,6 +15,26 @@ public:
     WhrovMainWindow(int argc, char** argv, QWidget *parent = 0);
     ~WhrovMainWindow();
 
+protected:
+    void closeEvent(QCloseEvent *);
+
+private:
+    void notifyNewROI();
+signals:
+    void newROI(int x0, int y0, int x1, int y1, int shift);
+    void newProtocolSettings(
+            int rx0, int ry0, int rx1, int ry1,
+            int shift,
+            int imageSize,
+            int packetLength
+            );
+    void sendOrder(bool relative, int orientation, float Z, float X, float Y);
+
+public slots:
+    void updateROI(int x0, int y0, int x1, int y1);
+    void updatePosition(int orientation, float z, float x, float y);
+    void updatePercentComplete(int percent);
+
 private slots:
     void on_roi_x0_SpinBox_valueChanged(int arg1);
     void on_roi_y0_SpinBox_valueChanged(int arg1);
@@ -47,7 +67,6 @@ private slots:
 
 private:
     Ui::WhrovMainWindow * ui;
-    QROSNode qrosnode;
 };
 
 #endif // WHROVMAINWINDOW_H
