@@ -37,6 +37,14 @@ int main(int argc, char *argv[])
                                         int,
                                         int
                                         )));
+    QObject::connect(&w, SIGNAL(cancelLastOrder()),
+                     &rosNode, SLOT(cancelLastOrder()));
+
+    QObject::connect(&rosNode, SIGNAL(orderCancelled()),
+                     &w, SLOT(orderCancelled()));
+
+    QObject::connect(&rosNode, SIGNAL(orderActive()),
+                     &w, SLOT(orderActive()));
 
     QObject::connect(&rosNode, SIGNAL(newPosition(int, float, float, float)),
                      &w, SLOT(updatePosition(int, float, float, float)));
@@ -44,8 +52,9 @@ int main(int argc, char *argv[])
     QObject::connect(&rosNode, SIGNAL(newImage(const QImage &)),
                      &iw, SLOT(updateImage(QImage)));
 
-    QObject::connect(&rosNode, SIGNAL(orderPercentCompleteUpdated(int)),
-                     &w, SLOT(updatePercentComplete(int)));
+    QObject::connect(&rosNode, SIGNAL(orderFeedback(int, const QString &)),
+                     &w, SLOT(handleFeedback(int, const QString &)));
+
 
 
 

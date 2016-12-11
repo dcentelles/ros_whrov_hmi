@@ -60,13 +60,25 @@ void QROSNode::goalCompletedCallback(const actionlib::SimpleClientGoalState &sta
 {
     std::string msg = state.toString();
     qDebug() << "order completed: ";
+    if(state.state_ == state.ABORTED || state.state_ == state.PREEMPTED)
+    {
+        emit orderCancelled();
+    }
     //emit orderCompleted(msg);
 }
 
 void QROSNode::feedbackCallback(const merbots_whrov::MoveOrderFeedbackConstPtr &feedback)
 {
-    qDebug() << "Feedback: " << feedback->percent_complete;
-    emit orderPercentCompleteUpdated(feedback->percent_complete);
+    QString _msg = QString("Feedback: (\%%1) %2").arg(QString::number(feedback->percent_complete));
+    qDebug() << _msg;
+    emit orderFeedback(feedback->percent_complete,
+                       QString::fromStdString(feedback->message)
+                       );
+}
+
+void QROSNode::cancelLastOrder()
+{
+    orderClient->cancelAllGoals();
 }
 
 void QROSNode::sendOrder(bool relative, int orientation, float z, float x, float y)

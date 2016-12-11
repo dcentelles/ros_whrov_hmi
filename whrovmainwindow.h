@@ -29,11 +29,14 @@ signals:
             int packetLength
             );
     void sendOrder(bool relative, int orientation, float Z, float X, float Y);
+    void cancelLastOrder();
 
 public slots:
     void updateROI(int x0, int y0, int x1, int y1);
     void updatePosition(int orientation, float z, float x, float y);
-    void updatePercentComplete(int percent);
+    void handleFeedback(int percent, const QString & msg);
+    void orderCancelled();
+    void orderActive();
 
 private slots:
     void on_roi_x0_SpinBox_valueChanged(int arg1);
@@ -67,6 +70,8 @@ private slots:
 
 private:
     Ui::WhrovMainWindow * ui;
+
+    void printNotif(const QString & notif);
 };
 
 #endif // WHROVMAINWINDOW_H

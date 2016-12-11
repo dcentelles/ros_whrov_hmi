@@ -33,6 +33,12 @@ ImageView::ImageView(QWidget *parent) :
 
 
 }
+void ImageView::mouseReleaseEvent(QMouseEvent * _event)
+{
+    endROI(x1, y1);
+    qDebug() << "mouse release";
+    QMainWindow::mouseReleaseEvent(_event);
+}
 
 bool ImageView::eventFilter(QObject *obj, QEvent *event)
 {

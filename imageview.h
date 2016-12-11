@@ -33,6 +33,9 @@ protected:
     bool eventFilter(QObject *, QEvent *);
     void updateROI(int x0, int y0, int x1, int y1);
 
+    //For when the mouse is released outside the QPixamp:
+    void mouseReleaseEvent(QMouseEvent *);
+
 private:
     Ui::ImageView *ui;
     QPixmap pixmap, imagePixmap;

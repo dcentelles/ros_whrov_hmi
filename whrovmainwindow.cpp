@@ -1,36 +1,33 @@
 #include "whrovmainwindow.h"
 #include "ui_whrovmainwindow.h"
 #include <QDebug>
-//#include <QPainter>
+#include <QTime>
 
 WhrovMainWindow::WhrovMainWindow(int argc, char** argv, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::WhrovMainWindow)
 {
     ui->setupUi(this);
-
-/*
-    QPixmap input("/home/centelld/programming/catkin_ws/src/qt_ws/whrov_hmi/Girona-500_1_brit.jpg");
-    input = input.scaled(this->size(), Qt::IgnoreAspectRatio);
-    QImage image(this->size(), QImage::Format_ARGB32_Premultiplied);
-
-    QPainter p(&image);
-    p.drawPixmap(0, 0, input);
-    p.end();
-
-    QPixmap bkgnd = QPixmap::fromImage(image);
-    QPalette palette;
-    palette.setBrush(QPalette::Background, bkgnd);
-    this->setPalette(palette);
-
-    this->setFixedSize(this->size());
-    */
-
+    ui->notifications_plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+    ui->order_progressBar->setEnabled(false);
 }
 
 WhrovMainWindow::~WhrovMainWindow()
 {
     delete ui;
+}
+
+void WhrovMainWindow::printNotif(const QString & notif)
+{
+    QTime time = QTime::currentTime();
+    QString msg = QString("<font color=\"%1\">%2:&nbsp;</font>"
+                          "<font color=\"%3\">%3 </font>")
+            .arg("blue",
+                 time.toString("HH:mm:ss"),
+                 notif,
+                 "Lime"
+                 );
+    ui->notifications_plainTextEdit->appendHtml(msg);
 }
 
 void WhrovMainWindow::on_roi_x0_SpinBox_valueChanged(int arg1)
@@ -133,9 +130,23 @@ void WhrovMainWindow::on_sendOrder_pushButton_clicked()
 
 }
 
+void WhrovMainWindow::orderActive()
+{
+    ui->order_progressBar->setEnabled(true);
+}
+
 void WhrovMainWindow::on_cancelOrder_pushButton_clicked()
 {
     qDebug() << "Cancel order button clicked";
+    emit cancelLastOrder();
+}
+
+void WhrovMainWindow::orderCancelled()
+{
+    ui->order_progressBar->setValue(0);
+    ui->order_progressBar->setEnabled(false);
+    printNotif("Last order cancelled"
+                );
 }
 
 void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1)
@@ -165,10 +176,10 @@ void WhrovMainWindow::notifyNewROI()
                 );
 }
 
-void WhrovMainWindow::updatePercentComplete(int percent)
+void WhrovMainWindow::handleFeedback(int percent, const QString & msg)
 {
-    ui->order_progressBar->setEnabled(true);
     ui->order_progressBar->setValue(percent);
+    printNotif(msg);
 }
 
 //http://stackoverflow.com/questions/21245121/qt-ui-closing-order

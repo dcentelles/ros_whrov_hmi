@@ -44,11 +44,13 @@ public slots:
                         int packetLength);
 
     void sendOrder(bool relative, int orientation, float z, float x, float y);
+    void cancelLastOrder();
 
 signals:
     void newPosition(int orientation, float z, float x, float y);
     void orderActive();
-    void orderPercentCompleteUpdated(int percent);
+    void orderFeedback(int percent, const QString & msg);
+    void orderCancelled();
     /*
     Note about signals and slots with parameters as reference:
     Although "const ... &", Qt will (by default) call the copy constructor to
