@@ -150,14 +150,14 @@ void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg)
 
 void QROSNode::CreateROSCommunications(ros::NodeHandle & nh)
 {
-    orderClient = new OrderActionClient("merbots/whrov/operator/actions/move_order", true);
+    orderClient = new OrderActionClient("/merbots/whrov/operator_control/actions/move_order", true);
     orderClient->waitForServer();
-    settings_publisher = nh.advertise<merbots_whrov::hrov_settings>("merbots/whrov/operator/desired_hrov_settings", 1);
-    position_subscriber = nh.subscribe<merbots_whrov::position>("merbots/whrov/operator/current_hrov_position", 1,
+    settings_publisher = nh.advertise<merbots_whrov::hrov_settings>("/merbots/whrov/operator_control/desired_hrov_settings", 1);
+    position_subscriber = nh.subscribe<merbots_whrov::position>("/merbots/whrov/operator_control/current_hrov_position", 1,
        boost::bind(&QROSNode::HandleNewROVPosition, this, _1));
 
     image_transport::ImageTransport it(nh);
-    image_subscriber = it.subscribe("merbots/whrov/operator/camera", 1,
+    image_subscriber = it.subscribe("/merbots/whrov/operator_control/camera", 1,
         boost::bind(&QROSNode::HandleNewImage, this, _1)
                                     );
 }
