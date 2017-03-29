@@ -376,6 +376,9 @@ Settings</string>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
             <widget class="QSpinBox" name="orientation_spinBox">
+             <property name="minimum">
+              <number>-360</number>
+             </property>
              <property name="maximum">
               <number>360</number>
              </property>

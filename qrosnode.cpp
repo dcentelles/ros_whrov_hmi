@@ -62,7 +62,7 @@ void QROSNode::goalCompletedCallback(const actionlib::SimpleClientGoalState &sta
     qDebug() << "order completed: ";
     if(state.state_ == state.ABORTED || state.state_ == state.PREEMPTED)
     {
-        emit orderCancelled();
+        //emit orderCancelled();
     }
     //emit orderCompleted(msg);
 }
