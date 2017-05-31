@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  merbots_whrov
+  merbots_whrov_msgs
   std_srvs
   cola2_msgs
   auv_msgs
@@ -161,6 +161,7 @@ catkin_package(
     actionlib_msgs
     cv_bridge
     image_transport
+    merbots_whrov_msgs
 #  DEPENDS system_lib
 )
 

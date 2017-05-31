@@ -4,16 +4,16 @@
 #include <QStringListModel>
 #include <ros/ros.h>
 #include <ros/network.h>
-#include <merbots_whrov/position.h>
-#include <merbots_whrov/hrov_settings.h>
+#include <merbots_whrov_msgs/position.h>
+#include <merbots_whrov_msgs//hrov_settings.h>
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
-#include <merbots_whrov/MoveOrderAction.h>
+#include <merbots_whrov_msgs/MoveOrderAction.h>
 #include "std_msgs/String.h"
 #include <actionlib/client/simple_action_client.h>
 
-typedef actionlib::SimpleActionClient<merbots_whrov::MoveOrderAction> OrderActionClient;
+typedef actionlib::SimpleActionClient<merbots_whrov_msgs::MoveOrderAction> OrderActionClient;
 
 class QROSNode : public QThread{
 Q_OBJECT
@@ -67,7 +67,7 @@ signals:
 private:
 
     void CreateROSCommunications(ros::NodeHandle & n);
-    void HandleNewROVPosition(const merbots_whrov::position::ConstPtr & msg);
+    void HandleNewROVPosition(const merbots_whrov_msgs::position::ConstPtr & msg);
     void HandleNewImage(const sensor_msgs::ImageConstPtr& msg);
     int init_argc;
     char** init_argv;
@@ -79,8 +79,8 @@ private:
 
     void goalActiveCallback();
     void goalCompletedCallback(const actionlib::SimpleClientGoalState & state,
-                               const merbots_whrov::MoveOrderResultConstPtr & result);
-    void feedbackCallback(const merbots_whrov::MoveOrderFeedbackConstPtr & feedback);
+                               const merbots_whrov_msgs::MoveOrderResultConstPtr & result);
+    void feedbackCallback(const merbots_whrov_msgs::MoveOrderFeedbackConstPtr & feedback);
 
     /*
      //* http://doc.qt.io/qt-4.8/qthread.html#details

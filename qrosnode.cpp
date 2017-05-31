@@ -56,7 +56,7 @@ void QROSNode::goalActiveCallback()
     emit orderActive();
 }
 
-void QROSNode::goalCompletedCallback(const actionlib::SimpleClientGoalState &state, const merbots_whrov::MoveOrderResultConstPtr &result)
+void QROSNode::goalCompletedCallback(const actionlib::SimpleClientGoalState &state, const merbots_whrov_msgs::MoveOrderResultConstPtr &result)
 {
     std::string msg = state.toString();
     qDebug() << "order completed: ";
@@ -67,7 +67,7 @@ void QROSNode::goalCompletedCallback(const actionlib::SimpleClientGoalState &sta
     //emit orderCompleted(msg);
 }
 
-void QROSNode::feedbackCallback(const merbots_whrov::MoveOrderFeedbackConstPtr &feedback)
+void QROSNode::feedbackCallback(const merbots_whrov_msgs::MoveOrderFeedbackConstPtr &feedback)
 {
     QString _msg = QString("Feedback: (\%%1) %2").arg(QString::number(feedback->percent_complete));
     qDebug() << _msg;
@@ -83,7 +83,7 @@ void QROSNode::cancelLastOrder()
 
 void QROSNode::sendOrder(bool relative, int orientation, float z, float x, float y)
 {
-    merbots_whrov::MoveOrderGoal goal;
+    merbots_whrov_msgs::MoveOrderGoal goal;
     goal.order.relative = relative;
     goal.order.yaw = orientation;
     goal.order.Z = z * 10;
@@ -102,7 +102,7 @@ void QROSNode::sendOrder(bool relative, int orientation, float z, float x, float
 
 void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1, int roiy1, int shift, int imageSize, int packetLength)
 {
-    merbots_whrov::hrov_settings msg;
+    merbots_whrov_msgs::hrov_settings msg;
     msg.image_config.roi_x0 = roix0;
     msg.image_config.roi_y0 = roiy0;
     msg.image_config.roi_x1 = roix1;
@@ -116,7 +116,7 @@ void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1, int roiy1
     settings_publisher.publish(msg);
 }
 
-void QROSNode::HandleNewROVPosition(const merbots_whrov::position::ConstPtr & msg)
+void QROSNode::HandleNewROVPosition(const merbots_whrov_msgs::position::ConstPtr & msg)
 {
     //log(Info, "New ROV position received");
     qDebug() << "New ROV position received";
@@ -152,8 +152,8 @@ void QROSNode::CreateROSCommunications(ros::NodeHandle & nh)
 {
     orderClient = new OrderActionClient("/merbots/whrov/operator_control/actions/move_order", true);
     orderClient->waitForServer();
-    settings_publisher = nh.advertise<merbots_whrov::hrov_settings>("/merbots/whrov/operator_control/desired_hrov_settings", 1);
-    position_subscriber = nh.subscribe<merbots_whrov::position>("/merbots/whrov/operator_control/current_hrov_position", 1,
+    settings_publisher = nh.advertise<merbots_whrov_msgs::hrov_settings>("/merbots/whrov/operator_control/desired_hrov_settings", 1);
+    position_subscriber = nh.subscribe<merbots_whrov_msgs::position>("/merbots/whrov/operator_control/current_hrov_position", 1,
        boost::bind(&QROSNode::HandleNewROVPosition, this, _1));
 
     image_transport::ImageTransport it(nh);
