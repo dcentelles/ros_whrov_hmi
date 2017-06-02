@@ -122,9 +122,9 @@ void QROSNode::HandleNewROVPosition(const merbots_whrov_msgs::position::ConstPtr
     qDebug() << "New ROV position received";
     emit newPosition(
                 msg->yaw,
-                msg->Z / 10.,
-                msg->X / 10.,
-                msg->Y / 10.
+                msg->Z,// / 10.,
+                msg->X,// / 10.,
+                msg->Y// / 10.
                 );
 }
 
