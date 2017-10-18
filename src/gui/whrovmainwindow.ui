@@ -311,7 +311,7 @@ Settings</string>
        <item row="3" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
-          <widget class="QLCDNumber" name="x_lcdNumber">
+          <widget class="QLCDNumber" name="roll_lcdNumber">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1211,7 +1211,7 @@ Settings</string>
        <item row="0" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLCDNumber" name="z_lcdNumber">
+          <widget class="QLCDNumber" name="altitude_lcdNumber">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1676,7 +1676,7 @@ Settings</string>
        <item row="2" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QLCDNumber" name="y_lcdNumber">
+          <widget class="QLCDNumber" name="pitch_lcdNumber">
            <property name="enabled">
             <bool>false</bool>
            </property>

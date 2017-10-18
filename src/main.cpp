@@ -21,9 +21,9 @@ int main(int argc, char *argv[]) {
 
   QObject::connect(&w, SIGNAL(sendOrder(int)), &rosNode, SLOT(sendOrder(int)));
 
-  QObject::connect(&w, SIGNAL(newProtocolSettings(int, int, int, int, int)),
-                   &rosNode,
-                   SLOT(updateProtocolSettings(int, int, int, int, int)));
+  QObject::connect(
+      &w, SIGNAL(newProtocolSettings(int, int, int, int, int, int)), &rosNode,
+      SLOT(updateProtocolSettings(int, int, int, int, int, int)));
 
   QObject::connect(&w, SIGNAL(cancelLastOrder()), &rosNode,
                    SLOT(cancelLastOrder()));

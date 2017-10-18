@@ -99,12 +99,12 @@ void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1) {
   ui->roi_y1_SpinBox->setValue(y1);
 }
 
-void WhrovMainWindow::updatePosition(int orientation, float z, float x,
-                                     float y) {
+void WhrovMainWindow::updatePosition(int orientation, float altitude,
+                                     float roll, float pitch) {
   ui->orientation_lcdNumber->display(orientation);
-  ui->z_lcdNumber->display(z);
-  ui->x_lcdNumber->display(x);
-  ui->y_lcdNumber->display(y);
+  ui->altitude_lcdNumber->display(altitude);
+  ui->roll_lcdNumber->display(roll);
+  ui->pitch_lcdNumber->display(pitch);
 }
 
 void WhrovMainWindow::notifyNewROI() {

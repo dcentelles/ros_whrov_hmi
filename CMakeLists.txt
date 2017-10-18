@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   merbots_whrov_msgs
 )
-
+#http://doc.qt.io/qt-5/cmake-manual.html
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
@@ -39,6 +39,7 @@ include_directories(
 set(HW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/include)
 set(HW_GUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/gui)
 
+#https://stackoverflow.com/questions/19761767/qt-5-cmake-fails-with-undefined-reference-to-vtable-on-hello-world-with-inc-sr
 qt5_wrap_cpp(hmi_SRC
     ${HW_HEADER_DIR}/imageview.h
     ${HW_HEADER_DIR}/whrovmainwindow.h

@@ -21,7 +21,7 @@ bool QROSNode::init() {
     return false;
   }
   ros::start(); // explicitly needed since our nodehandle is going out of scope.
-  ros::NodeHandle n;
+  ros::NodeHandle n("~");
   // Add your ros communications here.
   CreateROSCommunications(n);
 
@@ -39,7 +39,7 @@ bool QROSNode::init(const std::string &master_url,
     return false;
   }
   ros::start(); // explicitly needed since our nodehandle is going out of scope.
-  ros::NodeHandle n;
+  ros::NodeHandle n("~");
 
   // Add your ros communications here.
   CreateROSCommunications(n);
@@ -73,7 +73,9 @@ void QROSNode::feedbackCallback(
                      QString::fromStdString(feedback->message));
 }
 
-void QROSNode::cancelLastOrder() { orderClient->cancelAllGoals(); }
+void QROSNode::cancelLastOrder() {
+  //  orderClient->cancelAllGoals();
+}
 
 void QROSNode::sendOrder(int orientation) {
   merbots_whrov_msgs::MoveOrderGoal goal;
@@ -102,10 +104,10 @@ void QROSNode::HandleNewROVPosition(
     const merbots_whrov_msgs::position::ConstPtr &msg) {
   // log(Info, "New ROV position received");
   qDebug() << "New ROV position received";
-  emit newPosition(msg->yaw,
-                   msg->Z, // / 10.,
-                   msg->X, // / 10.,
-                   msg->Y  // / 10.
+  emit newPosition(msg->orientation,
+                   msg->altitude, // / 10.,
+                   msg->roll,     // / 10.,
+                   msg->pitch     // / 10.
                    );
 }
 
