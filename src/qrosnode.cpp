@@ -21,9 +21,9 @@ bool QROSNode::init() {
     return false;
   }
   ros::start(); // explicitly needed since our nodehandle is going out of scope.
-  ros::NodeHandle n("~");
+
   // Add your ros communications here.
-  CreateROSCommunications(n);
+  CreateROSCommunications();
 
   start();
   return true;
@@ -39,10 +39,9 @@ bool QROSNode::init(const std::string &master_url,
     return false;
   }
   ros::start(); // explicitly needed since our nodehandle is going out of scope.
-  ros::NodeHandle n("~");
 
   // Add your ros communications here.
-  CreateROSCommunications(n);
+  CreateROSCommunications();
 
   start();
   return true;
@@ -129,20 +128,20 @@ void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg) {
   // delete ibuffer;
 }
 
-void QROSNode::CreateROSCommunications(ros::NodeHandle &nh) {
+void QROSNode::CreateROSCommunications() {
+  ros::NodeHandle nh;
   //  orderClient = new OrderActionClient(
   //      "/merbots/whrov/operator_control/actions/move_order", true);
   //  orderClient->waitForServer();
   settings_publisher = nh.advertise<merbots_whrov_msgs::hrov_settings>(
-      "/merbots/whrov/operator_control/desired_hrov_settings", 1);
+      "desired_hrov_settings", 1);
   position_subscriber = nh.subscribe<merbots_whrov_msgs::position>(
-      "/merbots/whrov/operator_control/current_hrov_position", 1,
+      "current_hrov_position", 1,
       boost::bind(&QROSNode::HandleNewROVPosition, this, _1));
 
   image_transport::ImageTransport it(nh);
-  image_subscriber =
-      it.subscribe("/merbots/whrov/operator_control/camera", 1,
-                   boost::bind(&QROSNode::HandleNewImage, this, _1));
+  image_subscriber = it.subscribe(
+      "camera", 1, boost::bind(&QROSNode::HandleNewImage, this, _1));
 }
 
 void QROSNode::run() {

@@ -58,7 +58,7 @@ signals:
   void rosShutdown();
 
 private:
-  void CreateROSCommunications(ros::NodeHandle &n);
+  void CreateROSCommunications();
   void HandleNewROVPosition(const merbots_whrov_msgs::position::ConstPtr &msg);
   void HandleNewImage(const sensor_msgs::ImageConstPtr &msg);
   int init_argc;
