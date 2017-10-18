@@ -8,22 +8,19 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  merbots_whrov_msgs
   std_srvs
-  cola2_msgs
-  auv_msgs
   actionlib
   actionlib_msgs
   cv_bridge
   image_transport
+  merbots_whrov_msgs
 )
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
-set(CMAKE_AUTOMOC ON)
-
-SET(CMAKE_AUTOUIC ON) 
+#set(CMAKE_AUTOMOC ON)
+#SET(CMAKE_AUTOUIC ON)
 
 # Find the QtWidgets library
 find_package(Qt5Widgets)
@@ -35,15 +32,32 @@ generate_messages(DEPENDENCIES
     )
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  src/include
 )
+
+
+set(HW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/include)
+set(HW_GUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/gui)
+
+qt5_wrap_cpp(hmi_SRC
+    ${HW_HEADER_DIR}/imageview.h
+    ${HW_HEADER_DIR}/whrovmainwindow.h
+    ${HW_HEADER_DIR}/qrosnode.h
+    )
+qt5_wrap_ui(hmi_UI
+    ${HW_GUI_DIR}/whrovmainwindow.ui
+    ${HW_GUI_DIR}/imageview.ui
+    )
 
 set(${PROJECT_NAME}_LIB ${PROJECT_NAME}_lib)
 
 # Tell CMake to create the ${PROJECT_NAME} executable
 add_library(${${PROJECT_NAME}_LIB}
-	whrovmainwindow.cpp
-        imageview.cpp
-	qrosnode.cpp
+        src/whrovmainwindow.cpp
+        src/imageview.cpp
+        src/qrosnode.cpp
+        ${hmi_SRC}
+        ${hmi_UI}
 	)
 
 set(QT_DEPS 
@@ -53,7 +67,7 @@ set(QT_DEPS
 target_link_libraries(${${PROJECT_NAME}_LIB}  ${QT_DEPS}  ${catkin_LIBRARIES})
 
 add_executable(${PROJECT_NAME} 
-	main.cpp
+        src/main.cpp
 	)
 
 target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIB})
@@ -156,8 +170,6 @@ catkin_package(
     CATKIN_DEPENDS
     roscpp std_msgs
     message_runtime
-    cola2_msgs
-    auv_msgs
     actionlib_msgs
     cv_bridge
     image_transport
