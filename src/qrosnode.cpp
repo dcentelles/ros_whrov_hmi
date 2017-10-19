@@ -87,7 +87,8 @@ void QROSNode::sendOrder(int orientation) {
 }
 
 void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1,
-                                      int roiy1, int shift, int imageSize) {
+                                      int roiy1, int shift, int imageSize,
+                                      bool rgb) {
   merbots_whrov_msgs::hrov_settings msg;
   msg.image_config.roi_x0 = roix0;
   msg.image_config.roi_y0 = roiy0;
@@ -95,7 +96,7 @@ void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1,
   msg.image_config.roi_y1 = roiy1;
   msg.image_config.roi_shift = shift;
   msg.image_config.size = imageSize;
-
+  msg.image_config.encode_mono = !rgb;
   settings_publisher.publish(msg);
 }
 

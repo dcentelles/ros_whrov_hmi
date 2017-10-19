@@ -51,7 +51,8 @@ void WhrovMainWindow::on_updateSettings_toolButton_clicked() {
   emit newProtocolSettings(
       ui->roi_x0_SpinBox->value(), ui->roi_y0_SpinBox->value(),
       ui->roi_x1_SpinBox->value(), ui->roi_y1_SpinBox->value(),
-      ui->roi_shift_spinBox->value(), ui->imageSize_spinBox->value());
+      ui->roi_shift_spinBox->value(), ui->imageSize_spinBox->value(),
+      ui->rgb_radioButton->isChecked());
 }
 
 void WhrovMainWindow::on_globalOrder_radioButton_clicked() {

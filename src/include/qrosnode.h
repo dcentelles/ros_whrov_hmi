@@ -34,7 +34,7 @@ public:
 
 public slots:
   void updateProtocolSettings(int roix0, int roiy0, int roix1, int roiy1,
-                              int shift, int imageSize);
+                              int shift, int imageSize, bool rgb);
 
   void sendOrder(int orientation);
   void cancelLastOrder();

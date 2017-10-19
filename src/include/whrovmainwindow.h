@@ -23,7 +23,7 @@ private:
 signals:
   void newROI(int x0, int y0, int x1, int y1, int shift);
   void newProtocolSettings(int rx0, int ry0, int rx1, int ry1, int shift,
-                           int imageSize);
+                           int imageSize, bool rgb);
   void sendOrder(int orientation);
   void cancelLastOrder();
 
