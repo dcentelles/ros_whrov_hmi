@@ -6,14 +6,14 @@
 #include <actionlib/client/simple_action_client.h>
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.h>
-#include <merbots_whrov_msgs/MoveOrderAction.h>
+#include <merbots_whrov_msgs/OrderAction.h>
 #include <merbots_whrov_msgs/hrov_settings.h>
 #include <merbots_whrov_msgs/position.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <ros/network.h>
 #include <ros/ros.h>
 
-typedef actionlib::SimpleActionClient<merbots_whrov_msgs::MoveOrderAction>
+typedef actionlib::SimpleActionClient<merbots_whrov_msgs::OrderAction>
     OrderActionClient;
 
 class QROSNode : public QThread {
@@ -70,11 +70,11 @@ private:
   OrderActionClient *orderClient;
 
   void goalActiveCallback();
-  void goalCompletedCallback(
-      const actionlib::SimpleClientGoalState &state,
-      const merbots_whrov_msgs::MoveOrderResultConstPtr &result);
-  void feedbackCallback(
-      const merbots_whrov_msgs::MoveOrderFeedbackConstPtr &feedback);
+  void
+  goalCompletedCallback(const actionlib::SimpleClientGoalState &state,
+                        const merbots_whrov_msgs::OrderResultConstPtr &result);
+  void
+  feedbackCallback(const merbots_whrov_msgs::OrderFeedbackConstPtr &feedback);
 
   /*
    //* http://doc.qt.io/qt-4.8/qthread.html#details

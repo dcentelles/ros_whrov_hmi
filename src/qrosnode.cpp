@@ -54,7 +54,7 @@ void QROSNode::goalActiveCallback() {
 
 void QROSNode::goalCompletedCallback(
     const actionlib::SimpleClientGoalState &state,
-    const merbots_whrov_msgs::MoveOrderResultConstPtr &result) {
+    const merbots_whrov_msgs::OrderResultConstPtr &result) {
   std::string msg = state.toString();
   qDebug() << "order completed: ";
   if (state.state_ == state.ABORTED || state.state_ == state.PREEMPTED) {
@@ -64,7 +64,7 @@ void QROSNode::goalCompletedCallback(
 }
 
 void QROSNode::feedbackCallback(
-    const merbots_whrov_msgs::MoveOrderFeedbackConstPtr &feedback) {
+    const merbots_whrov_msgs::OrderFeedbackConstPtr &feedback) {
   QString _msg = QString("Feedback: (\%%1) %2")
                      .arg(QString::number(feedback->percent_complete));
   qDebug() << _msg;
@@ -72,18 +72,15 @@ void QROSNode::feedbackCallback(
                      QString::fromStdString(feedback->message));
 }
 
-void QROSNode::cancelLastOrder() {
-  //  orderClient->cancelAllGoals();
-}
+void QROSNode::cancelLastOrder() { orderClient->cancelAllGoals(); }
 
 void QROSNode::sendOrder(int orientation) {
-  merbots_whrov_msgs::MoveOrderGoal goal;
-  goal.order.yaw = orientation;
-  qDebug() << goal.order.Z << " " << goal.order.X << " " << goal.order.Y;
-  //  orderClient->sendGoal(
-  //      goal, boost::bind(&QROSNode::goalCompletedCallback, this, _1, _2),
-  //      boost::bind(&QROSNode::goalActiveCallback, this),
-  //      boost::bind(&QROSNode::feedbackCallback, this, _1));
+  merbots_whrov_msgs::OrderGoal goal;
+  goal.keep_heading_degrees = orientation;
+  orderClient->sendGoal(
+      goal, boost::bind(&QROSNode::goalCompletedCallback, this, _1, _2),
+      boost::bind(&QROSNode::goalActiveCallback, this),
+      boost::bind(&QROSNode::feedbackCallback, this, _1));
 }
 
 void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1,
@@ -135,9 +132,8 @@ void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg) {
 
 void QROSNode::CreateROSCommunications() {
   ros::NodeHandle nh;
-  //  orderClient = new OrderActionClient(
-  //      "/merbots/whrov/operator_control/actions/move_order", true);
-  //  orderClient->waitForServer();
+  orderClient = new OrderActionClient("order", true);
+  orderClient->waitForServer();
   settings_publisher = nh.advertise<merbots_whrov_msgs::hrov_settings>(
       "desired_hrov_settings", 1);
   position_subscriber = nh.subscribe<merbots_whrov_msgs::position>(
