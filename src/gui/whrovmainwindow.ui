@@ -1950,7 +1950,7 @@
       <property name="title">
        <string>Image compression and communication settings:</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0">
+      <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0">
        <item row="2" column="1" colspan="3">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <property name="spacing">
@@ -2078,7 +2078,7 @@ Settings</string>
           </sizepolicy>
          </property>
          <property name="maximum">
-          <number>10</number>
+          <number>15</number>
          </property>
         </widget>
        </item>
