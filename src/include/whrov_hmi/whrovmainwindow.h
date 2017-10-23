@@ -2,7 +2,8 @@
 #define WHROVMAINWINDOW_H
 
 #include <QMainWindow>
-#include <qrosnode.h>
+#include <whrov_hmi/constants.h>
+#include <whrov_hmi/qrosnode.h>
 
 namespace Ui {
 class WhrovMainWindow;
@@ -24,7 +25,7 @@ signals:
   void newROI(int x0, int y0, int x1, int y1, int shift);
   void newProtocolSettings(int rx0, int ry0, int rx1, int ry1, int shift,
                            int imageSize, bool rgb);
-  void sendOrder(int orientation);
+  void sendOrder(ORDER_TYPE type, int orientation, int holdTime);
   void cancelLastOrder();
 
 public slots:
@@ -56,8 +57,8 @@ private slots:
 
   void on_y_doubleSpinBox_valueChanged(double arg1);
 
-  void on_sendOrder_pushButton_clicked();
-
+  void on_keepHeading_pushButton_clicked();
+  void on_holdImageTime_pushButton_clicked();
   void on_cancelOrder_pushButton_clicked();
 
 private:

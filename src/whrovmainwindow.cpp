@@ -1,7 +1,10 @@
 #include <QDebug>
 #include <QTime>
 #include <ui_whrovmainwindow.h>
-#include <whrovmainwindow.h>
+#include <whrov_hmi/constants.h>
+#include <whrov_hmi/whrovmainwindow.h>
+
+using namespace whrov_hmi;
 
 WhrovMainWindow::WhrovMainWindow(int argc, char **argv, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::WhrovMainWindow) {
@@ -75,9 +78,16 @@ void WhrovMainWindow::on_y_doubleSpinBox_valueChanged(double arg1) {
   qDebug() << "Y: " << arg1;
 }
 
-void WhrovMainWindow::on_sendOrder_pushButton_clicked() {
+void WhrovMainWindow::on_keepHeading_pushButton_clicked() {
   qDebug() << "Send order button clicked";
-  int orientation = ui->orientation_spinBox->value();
+  int value = ui->orientation_spinBox->value();
+  emit sendOrder(ORDER_TYPE::HEADING, value, 0);
+}
+
+void WhrovMainWindow::on_holdImageTime_pushButton_clicked() {
+  qDebug() << "Send order button clicked";
+  int value = ui->holdImageTime_spinBox->value();
+  emit sendOrder(ORDER_TYPE::HOLD, 0, value);
 }
 
 void WhrovMainWindow::orderActive() { ui->order_progressBar->setEnabled(true); }

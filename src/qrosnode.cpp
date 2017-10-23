@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <QImage>
-#include <qrosnode.h>
+#include <whrov_hmi/qrosnode.h>
 
 QROSNode::QROSNode(int argc, char **argv) : init_argc(argc), init_argv(argv) {
   init();
@@ -74,9 +74,11 @@ void QROSNode::feedbackCallback(
 
 void QROSNode::cancelLastOrder() { orderClient->cancelAllGoals(); }
 
-void QROSNode::sendOrder(int orientation) {
+void QROSNode::sendOrder(ORDER_TYPE type, int orientation, int holdTime) {
   merbots_whrov_msgs::OrderGoal goal;
+  goal.type = type;
   goal.keep_heading_degrees = orientation;
+  goal.hold_channel_duration = holdTime;
   orderClient->sendGoal(
       goal, boost::bind(&QROSNode::goalCompletedCallback, this, _1, _2),
       boost::bind(&QROSNode::goalActiveCallback, this),

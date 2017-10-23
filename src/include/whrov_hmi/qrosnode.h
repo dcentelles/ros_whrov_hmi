@@ -12,6 +12,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <ros/network.h>
 #include <ros/ros.h>
+#include <whrov_hmi/constants.h>
+
+using namespace whrov_hmi;
 
 typedef actionlib::SimpleActionClient<merbots_whrov_msgs::OrderAction>
     OrderActionClient;
@@ -36,7 +39,7 @@ public slots:
   void updateProtocolSettings(int roix0, int roiy0, int roix1, int roiy1,
                               int shift, int imageSize, bool rgb);
 
-  void sendOrder(int orientation);
+  void sendOrder(ORDER_TYPE type, int orientation, int holdTime);
   void cancelLastOrder();
 
 signals:
@@ -97,5 +100,4 @@ private:
   };
   */
 };
-
 #endif // QROSNODE_H

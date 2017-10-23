@@ -30,13 +30,15 @@ generate_messages(DEPENDENCIES
     std_msgs
     actionlib_msgs
     )
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-  src/include
+
+add_definitions(-fPIC -std=c++14)
+
+SET(PROJECT_INCLUDE_DIRS
+    ${catkin_INCLUDE_DIRS}
+    src/include
 )
 
-
-set(HW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/include)
+set(HW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/include/whrov_hmi)
 set(HW_GUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/gui)
 
 #https://stackoverflow.com/questions/19761767/qt-5-cmake-fails-with-undefined-reference-to-vtable-on-hello-world-with-inc-sr
@@ -65,6 +67,8 @@ set(QT_DEPS
 	Qt5::Widgets
 	Qt5::Core
 	)
+
+target_include_directories(${${PROJECT_NAME}_LIB} PUBLIC ${PROJECT_INCLUDE_DIRS})
 target_link_libraries(${${PROJECT_NAME}_LIB}  ${QT_DEPS}  ${catkin_LIBRARIES})
 
 add_executable(${PROJECT_NAME} 

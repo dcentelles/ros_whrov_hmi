@@ -1,7 +1,9 @@
 #include <QApplication>
-#include <imageview.h>
-#include <qrosnode.h>
-#include <whrovmainwindow.h>
+#include <whrov_hmi/imageview.h>
+#include <whrov_hmi/qrosnode.h>
+#include <whrov_hmi/whrovmainwindow.h>
+
+using namespace whrov_hmi;
 
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
@@ -19,7 +21,11 @@ int main(int argc, char *argv[]) {
   QObject::connect(&w, SIGNAL(newROI(int, int, int, int, int)), &iw,
                    SLOT(updateROI(int, int, int, int, int)));
 
-  QObject::connect(&w, SIGNAL(sendOrder(int)), &rosNode, SLOT(sendOrder(int)));
+  // 0: ORDER_TYPE
+  // 1: heading
+  // 2: hold time
+  QObject::connect(&w, SIGNAL(sendOrder(ORDER_TYPE, int, int)), &rosNode,
+                   SLOT(sendOrder(ORDER_TYPE, int, int)));
 
   QObject::connect(
       &w, SIGNAL(newProtocolSettings(int, int, int, int, int, int, bool)),

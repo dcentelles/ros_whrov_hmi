@@ -1,7 +1,8 @@
 #include <QDebug>
 #include <QMouseEvent>
-#include <imageview.h>
 #include <ui_imageview.h>
+#include <whrov_hmi/constants.h>
+#include <whrov_hmi/imageview.h>
 
 ImageView::ImageView(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::ImageView), width(352), height(288),
