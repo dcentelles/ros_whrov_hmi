@@ -138,3 +138,7 @@ void WhrovMainWindow::closeEvent(QCloseEvent *e) {
   }
   QMainWindow::closeEvent(e);
 }
+
+void WhrovMainWindow::on_stopKeepHeading_pushButton_clicked() {
+  qDebug() << "Stop keep heading clicked";
+}

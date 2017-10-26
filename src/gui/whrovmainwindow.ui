@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
+    <width>667</width>
     <height>516</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>MERBOTS Wireless HROV HMI: Control</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,2">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,2,0,0,0">
     <item row="2" column="1">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="sizeConstraint">
@@ -29,44 +29,15 @@
          </sizepolicy>
         </property>
         <property name="title">
-         <string notr="true">High level orders:</string>
+         <string notr="true">More high level orders:</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0,0,0">
+        <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0" columnstretch="0,0,0">
          <property name="sizeConstraint">
           <enum>QLayout::SetMinimumSize</enum>
          </property>
          <property name="rightMargin">
           <number>9</number>
          </property>
-         <item row="12" column="0" colspan="3">
-          <widget class="QProgressBar" name="order_progressBar">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0" colspan="3">
-          <widget class="QPlainTextEdit" name="notifications_plainTextEdit">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
          <item row="4" column="2">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
@@ -109,7 +80,17 @@
            <item>
             <widget class="QPushButton" name="keepHeading_pushButton">
              <property name="text">
-              <string>Send</string>
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="stopKeepHeading_pushButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Stop</string>
              </property>
             </widget>
            </item>
@@ -122,16 +103,6 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0" colspan="2">
-          <widget class="QPushButton" name="cancelOrder_pushButton">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Cancel last order</string>
            </property>
           </widget>
          </item>
@@ -301,8 +272,14 @@ Settings</string>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
          <property name="maximum">
-          <number>4000</number>
+          <number>50</number>
+         </property>
+         <property name="value">
+          <number>1</number>
          </property>
         </widget>
        </item>
@@ -319,7 +296,7 @@ Settings</string>
        <item row="3" column="2">
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Image size (bytes): </string>
+          <string>Image size (number of packets): </string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -346,7 +323,46 @@ Settings</string>
       </layout>
      </widget>
     </item>
-    <item row="2" column="3">
+    <item row="5" column="1">
+     <widget class="QProgressBar" name="order_progressBar">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" rowspan="2">
+     <widget class="QPlainTextEdit" name="notifications_plainTextEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="3">
+     <widget class="QPushButton" name="cancelOrder_pushButton">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="text">
+       <string>Cancel last order</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3" rowspan="3">
      <widget class="QGroupBox" name="groupBox_5">
       <property name="title">
        <string>Current Navigation:</string>

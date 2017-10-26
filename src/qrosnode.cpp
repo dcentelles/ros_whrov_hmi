@@ -88,15 +88,19 @@ void QROSNode::sendOrder(ORDER_TYPE type, int orientation, int holdTime) {
 void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1,
                                       int roiy1, int shift, int imageSize,
                                       bool rgb) {
-  merbots_whrov_msgs::hrov_settings msg;
-  msg.image_config.roi_x0 = roix0;
-  msg.image_config.roi_y0 = roiy0;
-  msg.image_config.roi_x1 = roix1;
-  msg.image_config.roi_y1 = roiy1;
-  msg.image_config.roi_shift = shift;
-  msg.image_config.size = imageSize;
-  msg.image_config.encode_mono = !rgb;
-  settings_publisher.publish(msg);
+  merbots_whrov_msgs::OrderGoal goal;
+  goal.type = 2;
+  goal.image_config.roi_x0 = roix0;
+  goal.image_config.roi_y0 = roiy0;
+  goal.image_config.roi_x1 = roix1;
+  goal.image_config.roi_y1 = roiy1;
+  goal.image_config.roi_shift = shift;
+  goal.image_config.size = imageSize;
+  goal.image_config.encode_mono = !rgb;
+  orderClient->sendGoal(
+      goal, boost::bind(&QROSNode::goalCompletedCallback, this, _1, _2),
+      boost::bind(&QROSNode::goalActiveCallback, this),
+      boost::bind(&QROSNode::feedbackCallback, this, _1));
 }
 
 void QROSNode::HandleNewROVPosition(

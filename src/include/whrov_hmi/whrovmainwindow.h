@@ -36,6 +36,9 @@ public slots:
   void orderActive();
 
 private slots:
+  void on_stopKeepHeading_pushButton_clicked();
+
+private slots:
   void on_roi_x0_SpinBox_valueChanged(int arg1);
   void on_roi_y0_SpinBox_valueChanged(int arg1);
   void on_roi_x1_SpinBox_valueChanged(int arg1);
