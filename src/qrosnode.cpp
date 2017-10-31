@@ -103,15 +103,12 @@ void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1,
       boost::bind(&QROSNode::feedbackCallback, this, _1));
 }
 
-void QROSNode::HandleNewROVPosition(
-    const merbots_whrov_msgs::position::ConstPtr &msg) {
+void QROSNode::HandleNewROVState(
+    const merbots_whrov_msgs::state::ConstPtr &msg) {
   // log(Info, "New ROV position received");
   qDebug() << "New ROV position received";
-  emit newPosition(msg->orientation,
-                   msg->altitude, // / 10.,
-                   msg->roll,     // / 10.,
-                   msg->pitch     // / 10.
-                   );
+  emit newState(msg->heading, msg->altitude, msg->roll, msg->pitch,
+                msg->keepingHeading);
 }
 
 void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg) {
@@ -142,9 +139,9 @@ void QROSNode::CreateROSCommunications() {
   orderClient->waitForServer();
   settings_publisher = nh.advertise<merbots_whrov_msgs::hrov_settings>(
       "desired_hrov_settings", 1);
-  position_subscriber = nh.subscribe<merbots_whrov_msgs::position>(
-      "current_hrov_position", 1,
-      boost::bind(&QROSNode::HandleNewROVPosition, this, _1));
+  position_subscriber = nh.subscribe<merbots_whrov_msgs::state>(
+      "current_hrov_state", 1,
+      boost::bind(&QROSNode::HandleNewROVState, this, _1));
 
   image_transport::ImageTransport it(nh);
   image_subscriber = it.subscribe(

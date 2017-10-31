@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>667</width>
+    <width>696</width>
     <height>516</height>
    </rect>
   </property>
@@ -87,7 +87,7 @@
            <item>
             <widget class="QPushButton" name="stopKeepHeading_pushButton">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Stop</string>

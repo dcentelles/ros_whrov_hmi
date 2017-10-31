@@ -110,12 +110,15 @@ void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1) {
   ui->roi_y1_SpinBox->setValue(y1);
 }
 
-void WhrovMainWindow::updatePosition(int orientation, float altitude,
-                                     float roll, float pitch) {
+void WhrovMainWindow::updateState(int orientation, float altitude, float roll,
+                                  float pitch, bool keepingHeading) {
   ui->orientation_lcdNumber->display(orientation);
   ui->altitude_lcdNumber->display(altitude);
   ui->roll_lcdNumber->display(roll);
   ui->pitch_lcdNumber->display(pitch);
+
+  ui->stopKeepHeading_pushButton->setEnabled(keepingHeading);
+  ui->keepHeading_pushButton->setEnabled(!keepingHeading);
 }
 
 void WhrovMainWindow::notifyNewROI() {
@@ -141,4 +144,6 @@ void WhrovMainWindow::closeEvent(QCloseEvent *e) {
 
 void WhrovMainWindow::on_stopKeepHeading_pushButton_clicked() {
   qDebug() << "Stop keep heading clicked";
+  int value = 361; // keep heading disabled if > 360
+  emit sendOrder(ORDER_TYPE::HEADING, value, 0);
 }

@@ -8,7 +8,7 @@
 #include <image_transport/image_transport.h>
 #include <merbots_whrov_msgs/OrderAction.h>
 #include <merbots_whrov_msgs/hrov_settings.h>
-#include <merbots_whrov_msgs/position.h>
+#include <merbots_whrov_msgs/state.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <ros/network.h>
 #include <ros/ros.h>
@@ -43,7 +43,8 @@ public slots:
   void cancelLastOrder();
 
 signals:
-  void newPosition(int orientation, float z, float x, float y);
+  void newState(int orientation, float z, float x, float y,
+                bool keepingHeading);
   void orderActive();
   void orderFeedback(int percent, const QString &msg);
   void orderCancelled();
@@ -62,7 +63,7 @@ signals:
 
 private:
   void CreateROSCommunications();
-  void HandleNewROVPosition(const merbots_whrov_msgs::position::ConstPtr &msg);
+  void HandleNewROVState(const merbots_whrov_msgs::state::ConstPtr &msg);
   void HandleNewImage(const sensor_msgs::ImageConstPtr &msg);
   int init_argc;
   char **init_argv;

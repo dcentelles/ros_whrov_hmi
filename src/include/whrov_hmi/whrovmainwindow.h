@@ -30,7 +30,8 @@ signals:
 
 public slots:
   void updateROI(int x0, int y0, int x1, int y1);
-  void updatePosition(int orientation, float z, float x, float y);
+  void updateState(int orientation, float z, float x, float y,
+                   bool keepingHeading);
   void handleFeedback(int percent, const QString &msg);
   void orderCancelled();
   void orderActive();
