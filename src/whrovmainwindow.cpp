@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QTime>
+#include <qwt_dial_needle.h>
 #include <ui_whrovmainwindow.h>
 #include <whrov_hmi/constants.h>
 #include <whrov_hmi/whrovmainwindow.h>
@@ -11,6 +12,68 @@ WhrovMainWindow::WhrovMainWindow(int argc, char **argv, QWidget *parent)
   ui->setupUi(this);
   ui->notifications_plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
   ui->order_progressBar->setEnabled(false);
+
+  int c;
+  for (c = 0; c < QPalette::NColorRoles; c++) {
+    const QPalette::ColorRole colorRole = static_cast<QPalette::ColorRole>(c);
+
+    palette0.setColor(colorRole, QColor());
+  }
+
+  palette0.setColor(QPalette::Base,
+                    palette().color(backgroundRole()).light(120));
+  palette0.setColor(QPalette::WindowText, palette0.color(QPalette::Base));
+
+  ui->Compass->setLineWidth(4);
+  ui->Compass->setFrameShadow(QwtCompass::Sunken);
+  palette0.setColor(QPalette::Base, Qt::darkBlue);
+  palette0.setColor(QPalette::WindowText, QColor(Qt::darkBlue).dark(120));
+  palette0.setColor(QPalette::Text, Qt::white);
+
+  QwtCompassScaleDraw *scaleDraw = new QwtCompassScaleDraw();
+  scaleDraw->enableComponent(QwtAbstractScaleDraw::Ticks, true);
+  scaleDraw->enableComponent(QwtAbstractScaleDraw::Labels, true);
+  scaleDraw->enableComponent(QwtAbstractScaleDraw::Backbone, false);
+  scaleDraw->setTickLength(QwtScaleDiv::MinorTick, 1);
+  scaleDraw->setTickLength(QwtScaleDiv::MediumTick, 1);
+  scaleDraw->setTickLength(QwtScaleDiv::MajorTick, 3);
+
+  ui->Compass->setScaleDraw(scaleDraw);
+
+  ui->Compass->setScaleMaxMajor(36);
+  ui->Compass->setScaleMaxMinor(5);
+
+  ui->Compass->setNeedle(
+      new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
+  ui->Compass->setValue(220.0);
+
+  auto compass = ui->Compass;
+  QPalette newPalette = compass->palette();
+  for (c = 0; c < QPalette::NColorRoles; c++) {
+    const QPalette::ColorRole colorRole = static_cast<QPalette::ColorRole>(c);
+
+    if (palette0.color(colorRole).isValid())
+      newPalette.setColor(colorRole, palette0.color(colorRole));
+  }
+
+  for (int i = 0; i < QPalette::NColorGroups; i++) {
+    const QPalette::ColorGroup colorGroup =
+        static_cast<QPalette::ColorGroup>(i);
+
+    const QColor light =
+        newPalette.color(colorGroup, QPalette::Base).light(170);
+    const QColor dark = newPalette.color(colorGroup, QPalette::Base).dark(170);
+    const QColor mid =
+        compass->frameShadow() == QwtDial::Raised
+            ? newPalette.color(colorGroup, QPalette::Base).dark(110)
+            : newPalette.color(colorGroup, QPalette::Base).light(110);
+
+    newPalette.setColor(colorGroup, QPalette::Dark, dark);
+    newPalette.setColor(colorGroup, QPalette::Mid, mid);
+    newPalette.setColor(colorGroup, QPalette::Light, light);
+  }
+
+  compass->setPalette(newPalette);
 }
 
 WhrovMainWindow::~WhrovMainWindow() { delete ui; }
@@ -113,6 +176,7 @@ void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1) {
 void WhrovMainWindow::updateState(int orientation, float altitude, float roll,
                                   float pitch, bool keepingHeading) {
   ui->orientation_lcdNumber->display(orientation);
+  ui->Compass->setValue(orientation);
   ui->altitude_lcdNumber->display(altitude);
   ui->roll_lcdNumber->display(roll);
   ui->pitch_lcdNumber->display(pitch);

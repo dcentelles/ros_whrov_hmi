@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(whrov_hmi)
-
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_COLOR_MAKEFILE   ON)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -36,6 +37,7 @@ add_definitions(-fPIC -std=c++14)
 SET(PROJECT_INCLUDE_DIRS
     ${catkin_INCLUDE_DIRS}
     src/include
+    /usr/local/qwt-6.1.3/include/
 )
 
 set(HW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/include/whrov_hmi)
@@ -66,6 +68,7 @@ add_library(${${PROJECT_NAME}_LIB}
 set(QT_DEPS 
 	Qt5::Widgets
 	Qt5::Core
+        /usr/local/qwt-6.1.3/lib/libqwt.so
 	)
 
 target_include_directories(${${PROJECT_NAME}_LIB} PUBLIC ${PROJECT_INCLUDE_DIRS})

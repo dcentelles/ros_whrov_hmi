@@ -67,6 +67,7 @@ private slots:
 
 private:
   Ui::WhrovMainWindow *ui;
+  QPalette palette0;
 
   void printNotif(const QString &notif);
 };
