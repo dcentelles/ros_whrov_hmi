@@ -2,8 +2,11 @@
 #include <QTime>
 #include <qwt_dial_needle.h>
 #include <ui_whrovmainwindow.h>
+#include <whrov_hmi/attitude_indicator.h>
 #include <whrov_hmi/constants.h>
 #include <whrov_hmi/whrovmainwindow.h>
+
+#include <qtimer.h>
 
 using namespace whrov_hmi;
 
@@ -13,13 +16,14 @@ WhrovMainWindow::WhrovMainWindow(int argc, char **argv, QWidget *parent)
   ui->notifications_plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
   ui->order_progressBar->setEnabled(false);
 
+  // CONFIGURE COMPASS WIDGET
+  QPalette palette0;
   int c;
   for (c = 0; c < QPalette::NColorRoles; c++) {
     const QPalette::ColorRole colorRole = static_cast<QPalette::ColorRole>(c);
 
     palette0.setColor(colorRole, QColor());
   }
-
   palette0.setColor(QPalette::Base,
                     palette().color(backgroundRole()).light(120));
   palette0.setColor(QPalette::WindowText, palette0.color(QPalette::Base));
@@ -74,9 +78,38 @@ WhrovMainWindow::WhrovMainWindow(int argc, char **argv, QWidget *parent)
   }
 
   compass->setPalette(newPalette);
+
+  // CREATE AND CONFIGURE ATTITUDE INDICATOR
+
+  QwtDial *dial = NULL;
+  d_ai = new AttitudeIndicator(this);
+  d_ai->setPalette(customColorTheme(QColor(Qt::darkGray).dark(150)));
+  d_ai->scaleDraw()->setPenWidth(3);
+
+  dial = d_ai;
+  dial->setReadOnly(true);
+  dial->setLineWidth(4);
+  dial->setFrameShadow(QwtDial::Sunken);
+  d_ai->setSizePolicy(
+      QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+  ui->indicatorsHorizontalLayaout->addWidget(d_ai);
 }
 
 WhrovMainWindow::~WhrovMainWindow() { delete ui; }
+
+QPalette WhrovMainWindow::customColorTheme(const QColor &base) const {
+  QPalette palette;
+  palette.setColor(QPalette::Base, base);
+  palette.setColor(QPalette::Window, base.dark(150));
+  palette.setColor(QPalette::Mid, base.dark(110));
+  palette.setColor(QPalette::Light, base.light(170));
+  palette.setColor(QPalette::Dark, base.dark(170));
+  palette.setColor(QPalette::Text, base.dark(200).light(800));
+  palette.setColor(QPalette::WindowText, base.dark(200));
+
+  return palette;
+}
 
 void WhrovMainWindow::printNotif(const QString &notif) {
   QTime time = QTime::currentTime();
@@ -183,6 +216,14 @@ void WhrovMainWindow::updateState(int orientation, float altitude, float roll,
 
   ui->stopKeepHeading_pushButton->setEnabled(keepingHeading);
   ui->keepHeading_pushButton->setEnabled(!keepingHeading);
+
+  auto angle = roll > 0 ? roll : 360 + roll;
+  d_ai->setAngle(angle);
+  auto gradient = pitch > 0 ? pitch : 90 + pitch;
+  gradient /= 90;
+  if (gradient == 1)
+    gradient = 0.005;
+  d_ai->setGradient(-gradient);
 }
 
 void WhrovMainWindow::notifyNewROI() {

@@ -5,6 +5,8 @@
 #include <whrov_hmi/constants.h>
 #include <whrov_hmi/qrosnode.h>
 
+class AttitudeIndicator;
+
 namespace Ui {
 class WhrovMainWindow;
 }
@@ -21,6 +23,8 @@ protected:
 
 private:
   void notifyNewROI();
+  QPalette customColorTheme(const QColor &base) const;
+
 signals:
   void newROI(int x0, int y0, int x1, int y1, int shift);
   void newProtocolSettings(int rx0, int ry0, int rx1, int ry1, int shift,
@@ -67,7 +71,7 @@ private slots:
 
 private:
   Ui::WhrovMainWindow *ui;
-  QPalette palette0;
+  AttitudeIndicator *d_ai;
 
   void printNotif(const QString &notif);
 };

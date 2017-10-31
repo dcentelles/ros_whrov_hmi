@@ -48,6 +48,7 @@ qt5_wrap_cpp(hmi_SRC
     ${HW_HEADER_DIR}/imageview.h
     ${HW_HEADER_DIR}/whrovmainwindow.h
     ${HW_HEADER_DIR}/qrosnode.h
+    ${HW_HEADER_DIR}/attitude_indicator.h
     )
 qt5_wrap_ui(hmi_UI
     ${HW_GUI_DIR}/whrovmainwindow.ui
@@ -61,6 +62,7 @@ add_library(${${PROJECT_NAME}_LIB}
         src/whrovmainwindow.cpp
         src/imageview.cpp
         src/qrosnode.cpp
+        src/attitude_indicator.cpp
         ${hmi_SRC}
         ${hmi_UI}
 	)
