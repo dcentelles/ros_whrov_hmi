@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.1.0)
 project(whrov_hmi)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_COLOR_MAKEFILE   ON)
@@ -23,9 +23,15 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #set(CMAKE_AUTOMOC ON)
 #SET(CMAKE_AUTOUIC ON)
 
+set(Qt5Core_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5Core")
+set(Qt5Gui_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5Gui")
+set(Qt5Widgets_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5Widgets")
+set(Qt5_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5")
+set(QT_QMAKE_EXECUTABLE "~/Qt/5.9.2/gcc_64/bin/qmake")
+
 # Find the QtWidgets library
-find_package(Qt5Widgets)
-find_package(Qt5Core)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Widgets REQUIRED)
 
 generate_messages(DEPENDENCIES
     std_msgs
@@ -67,12 +73,13 @@ add_library(${${PROJECT_NAME}_LIB}
         ${hmi_UI}
 	)
 
-set(QT_DEPS 
-	Qt5::Widgets
-	Qt5::Core
+set(QT_DEPS
+        Qt5::Widgets
+        Qt5::Core
         /usr/local/qwt-6.1.3/lib/libqwt.so
-	)
-
+        )
+message("DETECTED QT VERSION: "${Qt5Core_VERSION})
+message("DETECTED QT LIBRARIES: "${Qt5Core_INCLUDE_DIRS})
 target_include_directories(${${PROJECT_NAME}_LIB} PUBLIC ${PROJECT_INCLUDE_DIRS})
 target_link_libraries(${${PROJECT_NAME}_LIB}  ${QT_DEPS}  ${catkin_LIBRARIES})
 
@@ -184,7 +191,8 @@ catkin_package(
     cv_bridge
     image_transport
     merbots_whrov_msgs
-#  DEPENDS system_lib
+   DEPENDS system_lib
+    ${QT_DEPS}
 )
 
 ###########
