@@ -207,7 +207,8 @@ void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1) {
 }
 
 void WhrovMainWindow::updateState(int orientation, float altitude, float roll,
-                                  float pitch, bool keepingHeading) {
+                                  float pitch, bool keepingHeading, int navmode,
+                                  bool armed) {
   ui->orientation_lcdNumber->display(orientation);
   ui->Compass->setValue(orientation);
   ui->altitude_lcdNumber->display(altitude);
@@ -224,6 +225,24 @@ void WhrovMainWindow::updateState(int orientation, float altitude, float roll,
   if (gradient == 1)
     gradient = 0.005;
   d_ai->setGradient(-gradient);
+
+  std::string navModeText;
+  navModeText = armed ? "ARMED - " : "DISARMED - ";
+  switch (navmode) {
+  case 0: {
+    navModeText += "MANUAL";
+    break;
+  }
+  case 1: {
+    navModeText += "STABILIZE";
+    break;
+  }
+  case 2: {
+    navModeText += "DEPTH HOLD";
+    break;
+  }
+  }
+  ui->modeTextEdit_label->setText(navModeText.c_str());
 }
 
 void WhrovMainWindow::notifyNewROI() {

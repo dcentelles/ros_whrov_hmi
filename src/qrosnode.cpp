@@ -108,7 +108,7 @@ void QROSNode::HandleNewROVState(
   // log(Info, "New ROV position received");
   qDebug() << "New ROV position received";
   emit newState(msg->heading, msg->altitude, msg->roll, msg->pitch,
-                msg->keepingHeading);
+                msg->keepingHeading, msg->navMode, msg->armed);
 }
 
 void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg) {
