@@ -220,10 +220,12 @@ void WhrovMainWindow::updateState(int orientation, float altitude, float roll,
 
   auto angle = roll > 0 ? roll : 360 + roll;
   d_ai->setAngle(angle);
-  auto gradient = pitch > 0 ? pitch : 90 + pitch;
+  auto gradient = -pitch;
   gradient /= 90;
   if (gradient == 1)
     gradient = 0.005;
+  else if(gradient == -1)
+    gradient = -0.005;
   d_ai->setGradient(-gradient);
 
   std::string navModeText;
