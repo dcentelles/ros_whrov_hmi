@@ -41,8 +41,8 @@ int main(int argc, char *argv[]) {
   QObject::connect(&rosNode, SIGNAL(orderActive()), &w, SLOT(orderActive()));
 
   QObject::connect(
-      &rosNode, SIGNAL(newState(int, float, float, float, bool, int, bool)), &w,
-      SLOT(updateState(int, float, float, float, bool, int, bool)));
+      &rosNode, SIGNAL(newState(int, float, float, float, bool, int, bool, double, double)), &w,
+      SLOT(updateState(int, float, float, float, bool, int, bool, double, double)));
 
   QObject::connect(&rosNode, SIGNAL(newImage(const QImage &)), &iw,
                    SLOT(updateImage(QImage)));

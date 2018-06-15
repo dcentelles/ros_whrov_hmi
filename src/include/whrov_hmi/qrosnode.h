@@ -43,8 +43,8 @@ public slots:
   void cancelLastOrder();
 
 signals:
-  void newState(int orientation, float z, float x, float y, bool keepingHeading,
-                int navmode, bool armed);
+  void newState(int orientation, float depth, float roll, float pitch, bool keepingHeading,
+                int navmode, bool armed, double x, double y);
   void orderActive();
   void orderFeedback(int percent, const QString &msg);
   void orderCancelled();

@@ -206,14 +206,12 @@ void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1) {
   ui->roi_y1_SpinBox->setValue(y1);
 }
 
-void WhrovMainWindow::updateState(int orientation, float altitude, float roll,
+void WhrovMainWindow::updateState(int orientation, float depth, float roll,
                                   float pitch, bool keepingHeading, int navmode,
-                                  bool armed) {
+                                  bool armed, double x, double y) {
   ui->orientation_lcdNumber->display(orientation);
   ui->Compass->setValue(orientation);
-  ui->altitude_lcdNumber->display(altitude);
-  ui->roll_lcdNumber->display(roll);
-  ui->pitch_lcdNumber->display(pitch);
+  ui->altitude_lcdNumber->display(depth);
 
   ui->stopKeepHeading_pushButton->setEnabled(keepingHeading);
   ui->keepHeading_pushButton->setEnabled(!keepingHeading);
