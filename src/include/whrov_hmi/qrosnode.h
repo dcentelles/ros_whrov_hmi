@@ -39,7 +39,7 @@ public slots:
   void updateProtocolSettings(int roix0, int roiy0, int roix1, int roiy1,
                               int shift, int imageSize, bool rgb);
 
-  void sendOrder(ORDER_TYPE type, int orientation, int holdTime);
+  void sendOrder(ORDER_TYPE type, int orientation, int holdTime, double x, double y, double z);
   void cancelLastOrder();
 
 signals:

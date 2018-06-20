@@ -177,13 +177,13 @@ void WhrovMainWindow::on_y_doubleSpinBox_valueChanged(double arg1) {
 void WhrovMainWindow::on_keepHeading_pushButton_clicked() {
   qDebug() << "Send order button clicked";
   int value = ui->orientation_spinBox->value();
-  emit sendOrder(ORDER_TYPE::HEADING, value, 0);
+  emit sendOrder(ORDER_TYPE::HEADING, value, 0, 0, 0, 0);
 }
 
 void WhrovMainWindow::on_holdImageTime_pushButton_clicked() {
   qDebug() << "Send order button clicked";
   int value = ui->holdImageTime_spinBox->value();
-  emit sendOrder(ORDER_TYPE::HOLD, 0, value);
+  emit sendOrder(ORDER_TYPE::HOLD, 0, value, 0, 0, 0);
 }
 
 void WhrovMainWindow::orderActive() { ui->order_progressBar->setEnabled(true); }
@@ -209,9 +209,17 @@ void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1) {
 void WhrovMainWindow::updateState(int orientation, float depth, float roll,
                                   float pitch, bool keepingHeading, int navmode,
                                   bool armed, double x, double y) {
+
   ui->orientation_lcdNumber->display(orientation);
   ui->Compass->setValue(orientation);
-  ui->altitude_lcdNumber->display(depth);
+
+  ui->altitude_lcdNumber->setSmallDecimalPoint(true);
+  ui->xpos_lcd->setSmallDecimalPoint(true);
+  ui->ypos_lcd->setSmallDecimalPoint(true);
+
+  ui->altitude_lcdNumber->display(depth/100.);
+  ui->xpos_lcd->display(x/100.);
+  ui->ypos_lcd->display(y/100.);
 
   ui->stopKeepHeading_pushButton->setEnabled(keepingHeading);
   ui->keepHeading_pushButton->setEnabled(!keepingHeading);
@@ -222,7 +230,7 @@ void WhrovMainWindow::updateState(int orientation, float depth, float roll,
   gradient /= 90;
   if (gradient == 1)
     gradient = 0.005;
-  else if(gradient == -1)
+  else if (gradient == -1)
     gradient = -0.005;
   d_ai->setGradient(-gradient);
 
@@ -231,14 +239,42 @@ void WhrovMainWindow::updateState(int orientation, float depth, float roll,
   switch (navmode) {
   case 0: {
     navModeText += "MANUAL";
+    ui->goToStartButton->setEnabled(true);
+    ui->goToStopButton->setEnabled(false);
+    ui->holdPositionStartButton->setEnabled(true);
+    ui->holdPositionStopButton->setEnabled(false);
     break;
   }
   case 1: {
     navModeText += "STABILIZE";
+    ui->goToStartButton->setEnabled(true);
+    ui->goToStopButton->setEnabled(false);
+    ui->holdPositionStartButton->setEnabled(true);
+    ui->holdPositionStopButton->setEnabled(false);
     break;
   }
   case 2: {
     navModeText += "DEPTH HOLD";
+    ui->goToStartButton->setEnabled(true);
+    ui->goToStopButton->setEnabled(false);
+    ui->holdPositionStartButton->setEnabled(true);
+    ui->holdPositionStopButton->setEnabled(false);
+    break;
+  }
+  case 3: {
+    navModeText += "GUIDED";
+    ui->goToStartButton->setEnabled(false);
+    ui->goToStopButton->setEnabled(true);
+    ui->holdPositionStartButton->setEnabled(true);
+    ui->holdPositionStopButton->setEnabled(false);
+    break;
+  }
+  case 4: {
+    navModeText += "HOLD POSITION";
+    ui->goToStartButton->setEnabled(true);
+    ui->goToStopButton->setEnabled(false);
+    ui->holdPositionStartButton->setEnabled(false);
+    ui->holdPositionStopButton->setEnabled(true);
     break;
   }
   }
@@ -269,5 +305,28 @@ void WhrovMainWindow::closeEvent(QCloseEvent *e) {
 void WhrovMainWindow::on_stopKeepHeading_pushButton_clicked() {
   qDebug() << "Stop keep heading clicked";
   int value = 361; // keep heading disabled if > 360
-  emit sendOrder(ORDER_TYPE::HEADING, value, 0);
+  emit sendOrder(ORDER_TYPE::HEADING, value, 0, 0, 0, 0);
+}
+
+void WhrovMainWindow::on_goToStartButton_clicked() {
+  qDebug() << "on_goToStartButton_clicked";
+  double x = ui->xposSpinBox->value();
+  double y = ui->yposSpinBox->value();
+  double z = ui->zposSpinBox->value();
+  emit sendOrder(ORDER_TYPE::GOTO, 0, 0, x, y, z);
+}
+
+void WhrovMainWindow::on_goToStopButton_clicked() {
+  qDebug() << "on_goToStartButton_clicked";
+  emit sendOrder(ORDER_TYPE::GOTO_STOP, 0, 0, 0, 0, 0);
+}
+
+void WhrovMainWindow::on_holdPositionStartButton_clicked() {
+  qDebug() << "on_goToStartButton_clicked";
+  emit sendOrder(ORDER_TYPE::HOLD_POSITION, 0, 0, 0, 0, 0);
+}
+
+void WhrovMainWindow::on_holdPositionStopButton_clicked() {
+  qDebug() << "on_goToStartButton_clicked";
+  emit sendOrder(ORDER_TYPE::HOLD_POSITION_STOP, 0, 0, 0, 0, 0);
 }

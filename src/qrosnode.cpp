@@ -74,7 +74,8 @@ void QROSNode::feedbackCallback(
 
 void QROSNode::cancelLastOrder() { orderClient->cancelAllGoals(); }
 
-void QROSNode::sendOrder(ORDER_TYPE type, int orientation, int holdTime) {
+void QROSNode::sendOrder(ORDER_TYPE type, int orientation, int holdTime,
+                         double x, double y, double z) {
   merbots_whrov_msgs::OrderGoal goal;
   goal.type = type;
   goal.keep_heading_degrees = orientation;
@@ -89,7 +90,7 @@ void QROSNode::updateProtocolSettings(int roix0, int roiy0, int roix1,
                                       int roiy1, int shift, int imageSize,
                                       bool rgb) {
   merbots_whrov_msgs::OrderGoal goal;
-  goal.type = 2;
+  goal.type = UPDATE_IMG_SETTINGS;
   goal.image_config.roi_x0 = roix0;
   goal.image_config.roi_y0 = roiy0;
   goal.image_config.roi_x1 = roix1;
@@ -108,8 +109,8 @@ void QROSNode::HandleNewROVState(
   // log(Info, "New ROV position received");
   qDebug() << "New ROV position received";
   emit newState(msg->heading, msg->altitude, msg->roll, msg->pitch,
-                msg->keepingHeading, msg->navMode, msg->armed, msg->x / 100.,
-                msg->y / 100.);
+                msg->keepingHeading, msg->navMode, msg->armed, msg->x,
+                msg->y);
 }
 
 void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg) {

@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
   // 0: ORDER_TYPE
   // 1: heading
   // 2: hold time
-  QObject::connect(&w, SIGNAL(sendOrder(ORDER_TYPE, int, int)), &rosNode,
-                   SLOT(sendOrder(ORDER_TYPE, int, int)));
+  QObject::connect(&w, SIGNAL(sendOrder(ORDER_TYPE, int, int, double, double, double)), &rosNode,
+                   SLOT(sendOrder(ORDER_TYPE, int, int, double, double, double)));
 
   QObject::connect(
       &w, SIGNAL(newProtocolSettings(int, int, int, int, int, int, bool)),

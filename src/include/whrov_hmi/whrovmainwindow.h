@@ -29,7 +29,7 @@ signals:
   void newROI(int x0, int y0, int x1, int y1, int shift);
   void newProtocolSettings(int rx0, int ry0, int rx1, int ry1, int shift,
                            int imageSize, bool rgb);
-  void sendOrder(ORDER_TYPE type, int orientation, int holdTime);
+  void sendOrder(ORDER_TYPE type, int orientation, int holdTime, double x, double y, double z);
   void cancelLastOrder();
 
 public slots:
@@ -39,6 +39,18 @@ public slots:
   void handleFeedback(int percent, const QString &msg);
   void orderCancelled();
   void orderActive();
+
+private slots:
+  void on_holdPositionStopButton_clicked();
+
+private slots:
+  void on_holdPositionStartButton_clicked();
+
+private slots:
+  void on_goToStopButton_clicked();
+
+private slots:
+  void on_goToStartButton_clicked();
 
 private slots:
   void on_stopKeepHeading_pushButton_clicked();

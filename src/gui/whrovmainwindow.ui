@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>969</width>
-    <height>503</height>
+    <height>596</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -127,6 +127,9 @@
          </item>
          <item row="1" column="1">
           <widget class="QLabel" name="label_10">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="text">
             <string>Hold position:</string>
            </property>
@@ -166,13 +169,25 @@
          <item row="0" column="2">
           <layout class="QHBoxLayout" name="horizontalLayout_12">
            <item>
-            <widget class="QDoubleSpinBox" name="xposSpinBox"/>
+            <widget class="QDoubleSpinBox" name="xposSpinBox">
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+            </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="yposSpinBox"/>
+            <widget class="QDoubleSpinBox" name="yposSpinBox">
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+            </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="zposSpinBox"/>
+            <widget class="QDoubleSpinBox" name="zposSpinBox">
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="goToStartButton">
