@@ -80,6 +80,9 @@ void QROSNode::sendOrder(ORDER_TYPE type, int orientation, int holdTime,
   goal.type = type;
   goal.keep_heading_degrees = orientation;
   goal.hold_channel_duration = holdTime;
+  goal.x = x;
+  goal.y = y;
+  goal.depth = z;
   orderClient->sendGoal(
       goal, boost::bind(&QROSNode::goalCompletedCallback, this, _1, _2),
       boost::bind(&QROSNode::goalActiveCallback, this),

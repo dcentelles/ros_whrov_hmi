@@ -217,9 +217,9 @@ void WhrovMainWindow::updateState(int orientation, float depth, float roll,
   ui->xpos_lcd->setSmallDecimalPoint(true);
   ui->ypos_lcd->setSmallDecimalPoint(true);
 
-  ui->altitude_lcdNumber->display(depth/100.);
-  ui->xpos_lcd->display(x/100.);
-  ui->ypos_lcd->display(y/100.);
+  ui->altitude_lcdNumber->display(depth / 100.);
+  ui->xpos_lcd->display(x / 100.);
+  ui->ypos_lcd->display(y / 100.);
 
   ui->stopKeepHeading_pushButton->setEnabled(keepingHeading);
   ui->keepHeading_pushButton->setEnabled(!keepingHeading);
@@ -239,42 +239,32 @@ void WhrovMainWindow::updateState(int orientation, float depth, float roll,
   switch (navmode) {
   case 0: {
     navModeText += "MANUAL";
-    ui->goToStartButton->setEnabled(true);
-    ui->goToStopButton->setEnabled(false);
-    ui->holdPositionStartButton->setEnabled(true);
-    ui->holdPositionStopButton->setEnabled(false);
+    ui->goToStartButton->setEnabled(false);
     break;
   }
   case 1: {
     navModeText += "STABILIZE";
-    ui->goToStartButton->setEnabled(true);
-    ui->goToStopButton->setEnabled(false);
-    ui->holdPositionStartButton->setEnabled(true);
-    ui->holdPositionStopButton->setEnabled(false);
+    ui->goToStartButton->setEnabled(false);
     break;
   }
   case 2: {
     navModeText += "DEPTH HOLD";
-    ui->goToStartButton->setEnabled(true);
-    ui->goToStopButton->setEnabled(false);
-    ui->holdPositionStartButton->setEnabled(true);
-    ui->holdPositionStopButton->setEnabled(false);
+    ui->goToStartButton->setEnabled(false);
     break;
   }
   case 3: {
-    navModeText += "GUIDED";
+    navModeText += "HOLD POS";
     ui->goToStartButton->setEnabled(false);
-    ui->goToStopButton->setEnabled(true);
-    ui->holdPositionStartButton->setEnabled(true);
-    ui->holdPositionStopButton->setEnabled(false);
     break;
   }
   case 4: {
-    navModeText += "HOLD POSITION";
+    navModeText += "GUIDED";
     ui->goToStartButton->setEnabled(true);
-    ui->goToStopButton->setEnabled(false);
-    ui->holdPositionStartButton->setEnabled(false);
-    ui->holdPositionStopButton->setEnabled(true);
+    break;
+  }
+  case 5: {
+    navModeText += "UNKNOWN";
+    ui->goToStartButton->setEnabled(false);
     break;
   }
   }
@@ -313,7 +303,8 @@ void WhrovMainWindow::on_goToStartButton_clicked() {
   double x = ui->xposSpinBox->value();
   double y = ui->yposSpinBox->value();
   double z = ui->zposSpinBox->value();
-  emit sendOrder(ORDER_TYPE::GOTO, 0, 0, x, y, z);
+  double heading = ui->gotoHeadingSpinBox->value();
+  emit sendOrder(ORDER_TYPE::GOTO, 0, heading, x, y, z);
 }
 
 void WhrovMainWindow::on_goToStopButton_clicked() {
