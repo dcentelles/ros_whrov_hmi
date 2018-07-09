@@ -165,7 +165,6 @@ void QROSNode::CreateROSCommunications() {
     tf::TransformListener listener;
     std::string origin = "local_origin_ned", target = "bluerov2_ghost";
     std::string origin_enu = "local_origin", target_enu = "bluerov2_ghost_enu";
-    std::string origin_enu = "local_origin", target_enu = "bluerov2_ghost_enu";
     tf::StampedTransform current_origin_target_tf;
     while (1) {
       try {
@@ -183,13 +182,12 @@ void QROSNode::CreateROSCommunications() {
         double degs = yaw * (180 / M_PI);
         if(degs < 0) degs = 360 + degs;
 
+        emit desiredPositionUpdated(x, y, z, degs);
+
         listener.waitForTransform(origin_enu, target_enu, ros::Time(0),
                                   ros::Duration(1));
         listener.lookupTransform(origin_enu, target_enu, ros::Time(0),
                                  current_origin_target_tf);
-
-
-        emit desiredPositionUpdated(x, y, z, degs);
 
         //The following is for debug purposes.
         double enuYaw;
