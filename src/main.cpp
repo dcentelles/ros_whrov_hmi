@@ -24,8 +24,9 @@ int main(int argc, char *argv[]) {
   // 0: ORDER_TYPE
   // 1: heading
   // 2: hold time
-  QObject::connect(&w, SIGNAL(sendOrder(ORDER_TYPE, int, int, double, double, double)), &rosNode,
-                   SLOT(sendOrder(ORDER_TYPE, int, int, double, double, double)));
+  QObject::connect(
+      &w, SIGNAL(sendOrder(ORDER_TYPE, int, int, double, double, double)),
+      &rosNode, SLOT(sendOrder(ORDER_TYPE, int, int, double, double, double)));
 
   QObject::connect(
       &w, SIGNAL(newProtocolSettings(int, int, int, int, int, int, bool)),
@@ -40,15 +41,23 @@ int main(int argc, char *argv[]) {
 
   QObject::connect(&rosNode, SIGNAL(orderActive()), &w, SLOT(orderActive()));
 
-  QObject::connect(
-      &rosNode, SIGNAL(newState(int, float, float, float, bool, int, bool, double, double)), &w,
-      SLOT(updateState(int, float, float, float, bool, int, bool, double, double)));
+  QObject::connect(&rosNode, SIGNAL(newState(int, float, float, float, bool,
+                                             int, bool, double, double)),
+                   &w, SLOT(updateState(int, float, float, float, bool, int,
+                                        bool, double, double)));
 
   QObject::connect(&rosNode, SIGNAL(newImage(const QImage &)), &iw,
                    SLOT(updateImage(QImage)));
 
   QObject::connect(&rosNode, SIGNAL(orderFeedback(int, const QString &)), &w,
                    SLOT(handleFeedback(int, const QString &)));
+
+  QObject::connect(
+      &rosNode, SIGNAL(desiredPositionUpdated(double, double, double, double)),
+      &w, SLOT(desiredPositionUpdated(double, double, double, double)));
+  QObject::connect(
+      &w, SIGNAL(updateDesiredPosition(double, double, double, double)),
+      &rosNode, SLOT(updateDesiredPosition(double, double, double, double)));
 
   rosNode.init();
   w.show();

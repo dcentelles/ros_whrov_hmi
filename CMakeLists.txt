@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
   merbots_whrov_msgs
+  tf
 )
 #http://doc.qt.io/qt-5/cmake-manual.html
 # Find includes in corresponding build directories
@@ -191,6 +192,7 @@ catkin_package(
     cv_bridge
     image_transport
     merbots_whrov_msgs
+    tf
    DEPENDS system_lib
     ${QT_DEPS}
 )

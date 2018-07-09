@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>969</width>
+    <width>1020</width>
     <height>596</height>
    </rect>
   </property>
@@ -128,7 +128,7 @@
          <item row="0" column="1">
           <widget class="QLabel" name="label_11">
            <property name="text">
-            <string>Go to NED pos. (x,y,depth, heading):</string>
+            <string>Go to NED pos. (x,y,z, yaw):</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -139,6 +139,12 @@
           <layout class="QHBoxLayout" name="horizontalLayout_12">
            <item>
             <widget class="QDoubleSpinBox" name="xposSpinBox">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
              <property name="minimum">
               <double>-99.989999999999995</double>
              </property>
@@ -146,6 +152,12 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="yposSpinBox">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
              <property name="minimum">
               <double>-99.989999999999995</double>
              </property>
@@ -153,6 +165,12 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="zposSpinBox">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
              <property name="minimum">
               <double>-99.989999999999995</double>
              </property>
@@ -160,6 +178,18 @@
            </item>
            <item>
             <widget class="QSpinBox" name="gotoHeadingSpinBox">
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="keyboardTracking">
+              <bool>true</bool>
+             </property>
              <property name="maximum">
               <number>360</number>
              </property>

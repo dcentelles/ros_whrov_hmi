@@ -24,6 +24,7 @@ protected:
 private:
   void notifyNewROI();
   QPalette customColorTheme(const QColor &base) const;
+  void enableGoToControls(bool v);
 
 signals:
   void newROI(int x0, int y0, int x1, int y1, int shift);
@@ -31,6 +32,7 @@ signals:
                            int imageSize, bool rgb);
   void sendOrder(ORDER_TYPE type, int orientation, int holdTime, double x, double y, double z);
   void cancelLastOrder();
+  void updateDesiredPosition(double x, double y, double z, double yaw);
 
 public slots:
   void updateROI(int x0, int y0, int x1, int y1);
@@ -39,6 +41,7 @@ public slots:
   void handleFeedback(int percent, const QString &msg);
   void orderCancelled();
   void orderActive();
+  void desiredPositionUpdated(double x, double y, double z, double yaw);
 
 private slots:
   void on_holdPositionStopButton_clicked();

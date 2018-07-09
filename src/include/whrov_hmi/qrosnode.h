@@ -41,6 +41,7 @@ public slots:
 
   void sendOrder(ORDER_TYPE type, int orientation, int holdTime, double x, double y, double z);
   void cancelLastOrder();
+  void updateDesiredPosition(double x, double y, double z, double yaw);
 
 signals:
   void newState(int orientation, float depth, float roll, float pitch, bool keepingHeading,
@@ -48,6 +49,7 @@ signals:
   void orderActive();
   void orderFeedback(int percent, const QString &msg);
   void orderCancelled();
+  void desiredPositionUpdated(double x, double y, double z, double yaw);
   /*
   Note about signals and slots with parameters as reference:
   Although "const ... &", Qt will (by default) call the copy constructor to
@@ -68,6 +70,7 @@ private:
   int init_argc;
   char **init_argv;
   ros::Publisher settings_publisher;
+  ros::Publisher pose_pub;
   ros::Subscriber position_subscriber;
   image_transport::Subscriber image_subscriber;
   QStringListModel logging_model;

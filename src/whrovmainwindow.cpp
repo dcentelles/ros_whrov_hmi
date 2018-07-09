@@ -98,6 +98,14 @@ WhrovMainWindow::WhrovMainWindow(int argc, char **argv, QWidget *parent)
 
 WhrovMainWindow::~WhrovMainWindow() { delete ui; }
 
+void WhrovMainWindow::desiredPositionUpdated(double x, double y, double z,
+                                             double yaw) {
+  ui->xposSpinBox->setValue(x);
+  ui->yposSpinBox->setValue(y);
+  ui->zposSpinBox->setValue(z);
+  ui->gotoHeadingSpinBox->setValue(std::round(yaw));
+}
+
 QPalette WhrovMainWindow::customColorTheme(const QColor &base) const {
   QPalette palette;
   palette.setColor(QPalette::Base, base);
@@ -206,6 +214,14 @@ void WhrovMainWindow::updateROI(int x0, int y0, int x1, int y1) {
   ui->roi_y1_SpinBox->setValue(y1);
 }
 
+void WhrovMainWindow::enableGoToControls(bool v) {
+  ui->xposSpinBox->setEnabled(v);
+  ui->yposSpinBox->setEnabled(v);
+  ui->zposSpinBox->setEnabled(v);
+  ui->gotoHeadingSpinBox->setEnabled(v);
+  ui->goToStartButton->setEnabled(v);
+}
+
 void WhrovMainWindow::updateState(int orientation, float depth, float roll,
                                   float pitch, bool keepingHeading, int navmode,
                                   bool armed, double x, double y) {
@@ -239,32 +255,32 @@ void WhrovMainWindow::updateState(int orientation, float depth, float roll,
   switch (navmode) {
   case 0: {
     navModeText += "MANUAL";
-    ui->goToStartButton->setEnabled(false);
+    enableGoToControls(false);
     break;
   }
   case 1: {
     navModeText += "STABILIZE";
-    ui->goToStartButton->setEnabled(false);
+    enableGoToControls(false);
     break;
   }
   case 2: {
     navModeText += "DEPTH HOLD";
-    ui->goToStartButton->setEnabled(false);
+    enableGoToControls(false);
     break;
   }
   case 3: {
     navModeText += "HOLD POS";
-    ui->goToStartButton->setEnabled(false);
+    enableGoToControls(false);
     break;
   }
   case 4: {
     navModeText += "GUIDED";
-    ui->goToStartButton->setEnabled(true);
+    enableGoToControls(true);
     break;
   }
   case 5: {
     navModeText += "UNKNOWN";
-    ui->goToStartButton->setEnabled(false);
+    enableGoToControls(false);
     break;
   }
   }
@@ -304,7 +320,7 @@ void WhrovMainWindow::on_goToStartButton_clicked() {
   double y = ui->yposSpinBox->value();
   double z = ui->zposSpinBox->value();
   double heading = ui->gotoHeadingSpinBox->value();
-  emit sendOrder(ORDER_TYPE::GOTO, 0, heading, x, y, z);
+  emit sendOrder(ORDER_TYPE::GOTO, heading, 0, x, y, z);
 }
 
 void WhrovMainWindow::on_goToStopButton_clicked() {

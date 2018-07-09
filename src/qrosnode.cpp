@@ -1,5 +1,8 @@
 #include <QDebug>
 #include <QImage>
+#include <tf/transform_broadcaster.h>
+#include <tf/transform_listener.h>
+#include <thread>
 #include <whrov_hmi/qrosnode.h>
 
 QROSNode::QROSNode(int argc, char **argv) : init_argc(argc), init_argv(argv) {
@@ -27,6 +30,10 @@ bool QROSNode::init() {
 
   start();
   return true;
+}
+
+void QROSNode::updateDesiredPosition(double x, double y, double z, double yaw) {
+
 }
 
 bool QROSNode::init(const std::string &master_url,
@@ -112,8 +119,7 @@ void QROSNode::HandleNewROVState(
   // log(Info, "New ROV position received");
   qDebug() << "New ROV position received";
   emit newState(msg->heading, msg->altitude, msg->roll, msg->pitch,
-                msg->keepingHeading, msg->navMode, msg->armed, msg->x,
-                msg->y);
+                msg->keepingHeading, msg->navMode, msg->armed, msg->x, msg->y);
 }
 
 void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg) {
@@ -148,9 +154,62 @@ void QROSNode::CreateROSCommunications() {
       "current_hrov_state", 1,
       boost::bind(&QROSNode::HandleNewROVState, this, _1));
 
+  //pose_pub = _nh.advertise<geometry_msgs::Pose>("bluerov2/pose", 1);
+
   image_transport::ImageTransport it(nh);
   image_subscriber = it.subscribe(
       "camera", 1, boost::bind(&QROSNode::HandleNewImage, this, _1));
+
+  std::thread ghost([this]() {
+    tf::TransformBroadcaster broadcaster;
+    tf::TransformListener listener;
+    std::string origin = "local_origin_ned", target = "bluerov2_ghost";
+    std::string origin_enu = "local_origin", target_enu = "bluerov2_ghost_enu";
+    std::string origin_enu = "local_origin", target_enu = "bluerov2_ghost_enu";
+    tf::StampedTransform current_origin_target_tf;
+    while (1) {
+      try {
+        listener.waitForTransform(origin, target, ros::Time(0),
+                                  ros::Duration(1));
+        listener.lookupTransform(origin, target, ros::Time(0),
+                                 current_origin_target_tf);
+
+        double x = current_origin_target_tf.getOrigin().x();
+        double y = current_origin_target_tf.getOrigin().y();
+        double z = current_origin_target_tf.getOrigin().z();
+        double yaw;
+        yaw = tf::getYaw(current_origin_target_tf.getRotation());
+
+        double degs = yaw * (180 / M_PI);
+        if(degs < 0) degs = 360 + degs;
+
+        listener.waitForTransform(origin_enu, target_enu, ros::Time(0),
+                                  ros::Duration(1));
+        listener.lookupTransform(origin_enu, target_enu, ros::Time(0),
+                                 current_origin_target_tf);
+
+
+        emit desiredPositionUpdated(x, y, z, degs);
+
+        //The following is for debug purposes.
+        double enuYaw;
+        enuYaw = tf::getYaw(current_origin_target_tf.getRotation());
+
+        double enuDegs = enuYaw * (180 / M_PI);
+        if(enuDegs < 0) enuDegs = 360 + enuDegs;
+
+
+        qDebug() << "yaw: " << yaw << " degs: " << degs << " enuYaw: " << enuYaw << " enuDegs: " << enuDegs;
+
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+      } catch (tf::TransformException &e) {
+        ROS_ERROR("Not able to lookup transform: %s", e.what());
+      }
+    }
+  });
+  ghost.detach();
 }
 
 void QROSNode::run() {
