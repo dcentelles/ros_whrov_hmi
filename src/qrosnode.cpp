@@ -165,8 +165,7 @@ void QROSNode::CreateROSCommunications() {
   std::thread ghost([this]() {
     tf::TransformBroadcaster broadcaster;
     tf::TransformListener listener;
-    std::string origin = "local_origin_ned", target = "bluerov2_ghost";
-    std::string origin_enu = "local_origin", target_enu = "bluerov2_ghost_enu";
+    std::string origin = "local_origin_ned", target = "g500_ghost";
     tf::StampedTransform current_origin_target_tf;
     while (1) {
       try {
@@ -186,20 +185,20 @@ void QROSNode::CreateROSCommunications() {
 
         emit desiredPositionUpdated(x, y, z, degs);
 
-        listener.waitForTransform(origin_enu, target_enu, ros::Time(0),
-                                  ros::Duration(1));
-        listener.lookupTransform(origin_enu, target_enu, ros::Time(0),
-                                 current_origin_target_tf);
+//        listener.waitForTransform(origin_enu, target_enu, ros::Time(0),
+//                                  ros::Duration(1));
+//        listener.lookupTransform(origin_enu, target_enu, ros::Time(0),
+//                                 current_origin_target_tf);
 
-        //The following is for debug purposes.
-        double enuYaw;
-        enuYaw = tf::getYaw(current_origin_target_tf.getRotation());
+//        //The following is for debug purposes.
+//        double enuYaw;
+//        enuYaw = tf::getYaw(current_origin_target_tf.getRotation());
 
-        double enuDegs = enuYaw * (180 / M_PI);
-        if(enuDegs < 0) enuDegs = 360 + enuDegs;
+//        double enuDegs = enuYaw * (180 / M_PI);
+//        if(enuDegs < 0) enuDegs = 360 + enuDegs;
 
 
-        qDebug() << "yaw: " << yaw << " degs: " << degs << " enuYaw: " << enuYaw << " enuDegs: " << enuDegs;
+//        qDebug() << "yaw: " << yaw << " degs: " << degs << " enuYaw: " << enuYaw << " enuDegs: " << enuDegs;
 
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
