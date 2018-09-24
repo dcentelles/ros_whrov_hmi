@@ -133,11 +133,13 @@ void QROSNode::HandleNewImage(const sensor_msgs::ImageConstPtr &msg) {
   QImage::Format format;
   if (msg->encoding == "mono8")
     format = QImage::Format_Grayscale8;
-  else
+  else if(msg->encoding == "rgb8")
     format = QImage::Format_RGB888;
+  else //if(msg->encoding == "bgr8")
+    format = QImage::Format_BGR30;
 
   QImage image(msg->data.data(), msg->width, msg->height, format);
-  image = image.rgbSwapped();
+  //image = image.rgbSwapped();
   // Note: The QImage is responible of deleting the ibuffer
 
   emit newImage(image);
