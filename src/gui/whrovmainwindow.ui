@@ -428,7 +428,7 @@ Settings</string>
           <number>1</number>
          </property>
          <property name="maximum">
-          <number>50</number>
+          <number>64</number>
          </property>
          <property name="value">
           <number>1</number>
@@ -2365,7 +2365,7 @@ Settings</string>
           <enum>QLayout::SetMaximumSize</enum>
          </property>
          <item>
-          <widget class="QwtCompass" name="Compass">
+          <widget class="QwtCompass" name="Compass" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -2375,7 +2375,7 @@ Settings</string>
            <property name="layoutDirection">
             <enum>Qt::LeftToRight</enum>
            </property>
-           <property name="lineWidth">
+           <property name="lineWidth" stdset="0">
             <number>4</number>
            </property>
           </widget>
@@ -2392,14 +2392,14 @@ Settings</string>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QwtCompass</class>
-   <extends>QwtDial</extends>
-   <header>qwt_compass.h</header>
-  </customwidget>
-  <customwidget>
    <class>QwtDial</class>
    <extends>QWidget</extends>
    <header>qwt_dial.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QwtCompass</class>
+   <extends>QwtDial</extends>
+   <header>qwt_compass.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

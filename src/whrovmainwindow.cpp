@@ -104,6 +104,7 @@ void WhrovMainWindow::desiredPositionUpdated(double x, double y, double z,
   ui->yposSpinBox->setValue(y);
   ui->zposSpinBox->setValue(z);
   ui->gotoHeadingSpinBox->setValue(std::round(yaw));
+  ui->orientation_spinBox->setValue(std::round(yaw));
 }
 
 QPalette WhrovMainWindow::customColorTheme(const QColor &base) const {
