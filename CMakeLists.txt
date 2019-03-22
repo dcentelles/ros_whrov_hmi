@@ -24,11 +24,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #set(CMAKE_AUTOMOC ON)
 #SET(CMAKE_AUTOUIC ON)
 
-set(Qt5Core_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5Core")
-set(Qt5Gui_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5Gui")
-set(Qt5Widgets_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5Widgets")
-set(Qt5_DIR "~/Qt/5.9.2/gcc_64/lib/cmake/Qt5")
-set(QT_QMAKE_EXECUTABLE "~/Qt/5.9.2/gcc_64/bin/qmake")
+set(Qt5Core_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5Core")
+set(Qt5Gui_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5Gui")
+set(Qt5Widgets_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5Widgets")
+set(Qt5_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5")
+set(QT_QMAKE_EXECUTABLE "~/programming/Qt/5.9.2/gcc_64/bin/qmake")
 
 # Find the QtWidgets library
 find_package(Qt5Core REQUIRED)
@@ -44,7 +44,7 @@ add_definitions(-fPIC -std=c++14)
 SET(PROJECT_INCLUDE_DIRS
     ${catkin_INCLUDE_DIRS}
     src/include
-    /usr/local/qwt-6.1.3/include/
+    /usr/local/qwt-6.1.4/include/
 )
 
 set(HW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/include/whrov_hmi)
@@ -77,19 +77,19 @@ add_library(${${PROJECT_NAME}_LIB}
 set(QT_DEPS
         Qt5::Widgets
         Qt5::Core
-        /usr/local/qwt-6.1.3/lib/libqwt.so
+        /usr/local/qwt-6.1.4/lib/libqwt.so
         )
 message("DETECTED QT VERSION: "${Qt5Core_VERSION})
 message("DETECTED QT LIBRARIES: "${Qt5Core_INCLUDE_DIRS})
 target_include_directories(${${PROJECT_NAME}_LIB} PUBLIC ${PROJECT_INCLUDE_DIRS})
 target_link_libraries(${${PROJECT_NAME}_LIB}  ${QT_DEPS}  ${catkin_LIBRARIES})
+add_dependencies(${${PROJECT_NAME}_LIB} merbots_whrov_msgs_generate_messages_cpp)
 
 add_executable(${PROJECT_NAME} 
         src/main.cpp
 	)
 
 target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIB})
-
 
 #add_dependencies(uniavan beginner_tutorials_generate_messages_cpp)
 # Use the Widgets module from Qt 5.
