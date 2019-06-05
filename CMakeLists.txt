@@ -24,15 +24,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #set(CMAKE_AUTOMOC ON)
 #SET(CMAKE_AUTOUIC ON)
 
-set(Qt5Core_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5Core")
-set(Qt5Gui_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5Gui")
-set(Qt5Widgets_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5Widgets")
-set(Qt5_DIR "~/programming/Qt/5.9.2/gcc_64/lib/cmake/Qt5")
-set(QT_QMAKE_EXECUTABLE "~/programming/Qt/5.9.2/gcc_64/bin/qmake")
-
-# Find the QtWidgets library
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core)
+find_package(Qt5Gui)
+find_package(Qt5Widgets)
+find_package(Qt5)
 
 generate_messages(DEPENDENCIES
     std_msgs
