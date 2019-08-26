@@ -199,7 +199,7 @@ void QROSNode::CreateROSCommunications() {
         if(enuDegs < 0) enuDegs = 360 + enuDegs;
 
 
-        qDebug() << "yaw: " << yaw << " degs: " << degs << " enuYaw: " << enuYaw << " enuDegs: " << enuDegs;
+        //qDebug() << "yaw: " << yaw << " degs: " << degs << " enuYaw: " << enuYaw << " enuDegs: " << enuDegs;
 
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
